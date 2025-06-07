@@ -1,6 +1,7 @@
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Button } from "@/components/ui/button";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 
@@ -14,11 +15,19 @@ export default function ProtectedLayout({
 
       {/* Fixed transparent navbar with blur */}
       <nav className="w-full fixed top-0 left-0 z-50 flex justify-center border-b border-b-foreground/10 h-16 bg-transparent backdrop-blur-2xl">
-        <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+        <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
           <div className="flex gap-5 items-center font-semibold">
             <Link href={"/"}>Girnar</Link>
           </div>
-          {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="sm">
+              <Link href="/protected/complaints">Complaints</Link>
+            </Button>
+            <Button variant="outline" size="sm">
+              <Link href="/protected/guest-room">Guest Room</Link>
+            </Button>
+            {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
+          </div>
         </div>
       </nav>
       {/* Add margin-top equal to navbar height */}

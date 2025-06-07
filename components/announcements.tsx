@@ -13,6 +13,9 @@ type Announcement = {
   description: string;
   is_public: boolean;
   created_at: string;
+  created_by: string;
+
+  full_name?: string; // This will be populated from user_profiles
 };
 
 interface AnnouncementsProps {
@@ -43,7 +46,28 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
         setError(error.message);
         setAnnouncements([]);
       } else {
-        setAnnouncements(data || []);
+        if (isPrivate) {
+          // For each announcement, fetch full_name from user_profiles using created_by
+          const announcementsWithNames = await Promise.all(
+            (data || []).map(async (a: Announcement) => {
+              let full_name = "Unknown";
+              if (a.created_by) {
+                const { data: profile } = await supabase
+                  .from("user_profiles")
+                  .select("full_name")
+                  .eq("id", a.created_by)
+                  .single();
+                if (profile && profile.full_name) {
+                  full_name = profile.full_name;
+                }
+              }
+              return { ...a, full_name };
+            })
+          );
+          setAnnouncements(announcementsWithNames);
+        } else {
+          setAnnouncements(data || []);
+        }
       }
       setLoading(false);
     };
@@ -62,7 +86,7 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
         {announcements.map((a) => (
           <li
             key={a.id}
-            className="border rounded-lg p-4 shadow flex flex-col gap-2"
+            className="border rounded-lg p-4 shadow flex flex-col gap-2 relative"
           >
             <div className="flex items-center justify-between mb-1">
               <strong className="text-lg">{a.title}</strong>
@@ -71,6 +95,11 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
               </span>
             </div>
             <div>{a.description}</div>
+            {isPrivate && (
+              <div className="absolute bottom-2 right-4 text-xs text-gray-500">
+                By: {a.full_name || "Unknown"}
+              </div>
+            )}
           </li>
         ))}
       </ul>

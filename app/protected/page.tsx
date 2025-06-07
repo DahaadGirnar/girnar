@@ -5,6 +5,7 @@ import Divider from "@/components/ui/divider";
 import Announcements from "@/components/announcements";
 import { InfoIcon } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
@@ -39,16 +40,27 @@ export default async function ProtectedPage() {
           Welcome {profile?.full_name || data.user.email}!
         </h2>
         {exists && (
-          <div className="text-sm text-muted-foreground">
-            <div>Room: {profile?.room_no || "N/A"}</div>
-            <div>Phone: {profile?.phone || "N/A"}</div>
-          </div>
+          <>
+            <div className="text-sm text-muted-foreground">
+              <div>Room: {profile?.room_no || "N/A"}</div>
+              <div>Phone: {profile?.phone || "N/A"}</div>
+            </div>
+
+            <div className="flex flex-row gap-4 mt-4">
+              <Button size="sm">
+                <Link href="/protected/complaints">Complaints</Link>
+              </Button>
+              <Button size="sm">
+                <Link href="/protected/guest-room">Guest Room</Link>
+              </Button>
+            </div>
+          </>
         )}
       </div>
 
       <Divider />
       {!exists && (<Announcements private={false} />)}
-      {exists && (<Announcements private={true} />)}
+      { exists && (<Announcements private={true}  />)}
     </div>
   );
 }

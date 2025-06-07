@@ -21,7 +21,7 @@ export default async function Home() {
     <main className="min-h-screen flex flex-col items-center">
       {/* Fixed navbar */}
       <nav className="w-full fixed top-0 left-0 z-50 flex justify-center border-b h-16 bg-transparent backdrop-blur-2xl">
-        <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+        <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
           <div className="flex gap-5 items-center font-semibold">
             <Link href={"/"}>Girnar</Link>
           </div>
