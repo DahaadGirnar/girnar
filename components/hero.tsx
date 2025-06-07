@@ -5,7 +5,7 @@ export function Hero() {
     <div className="flex flex-col gap-16 items-center">
       <div className="flex gap-8 justify-center items-center">
         <Image
-          src="/hero1.png"
+          src="/hero.png"
           alt="Logo"
           width={407.25}
           height={179}

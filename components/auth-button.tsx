@@ -10,9 +10,19 @@ export async function AuthButton() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: profile } = await supabase
+    .from("user_profiles")
+    .select("full_name")
+    .eq("id", user?.id)
+    .single();
+
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
+      <Button asChild size="sm" variant={"outline"}>
+        <Link href='/protected/profile'>
+          Hey, {profile?.full_name || user.email}!
+        </Link>
+      </Button>
       <LogoutButton />
     </div>
   ) : (
