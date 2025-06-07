@@ -94,9 +94,11 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
                 {new Date(a.created_at).toLocaleString()}
               </span>
             </div>
-            <div>{a.description}</div>
+            <div className="mb-2">{a.description}</div>
             {isPrivate && (
-              <div className="absolute bottom-2 right-4 text-xs text-gray-500">
+              <div
+                className="absolute bottom-2 right-4 text-xs text-gray-500"
+              >
                 By: {a.full_name || "Unknown"}
               </div>
             )}

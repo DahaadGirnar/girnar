@@ -54,7 +54,7 @@ export default async function ComplaintsPage() {
                     {c.created_at ? new Date(c.created_at).toLocaleString() : ""}
                   </span>
                 </div>
-                <div>{c.description || "No description"}</div>
+                <div className="mb-2">{c.description || "No description"}</div>
                 <div className="absolute bottom-2 right-4 text-xs text-gray-500">
                   {c.status}
                 </div>
