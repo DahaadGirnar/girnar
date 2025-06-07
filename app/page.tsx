@@ -2,6 +2,8 @@ import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import Divider from "@/components/ui/divider";
+import Announcements from "@/components/announcements";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 
@@ -19,8 +21,14 @@ export default function Home() {
         </nav>
         <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
           <Hero />
+          <Divider />
           <main className="flex-1 flex flex-col gap-6 px-4">
-            
+            <div className="text-center">
+              Paragraph content goes here. This is a sample text to demonstrate the layout of the page.
+              You can replace this with your own content.
+            </div>
+            <Divider />
+            <Announcements private={false} />
           </main>
         </div>
 

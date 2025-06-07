@@ -21,7 +21,10 @@ export default function Page() {
             <CardContent>
               <p className="text-sm text-muted-foreground">
                 You&apos;ve successfully signed up. Please check your email to
-                confirm your account before signing in.
+                confirm your account before signing in. It typically takes a few 
+                minutes to receive the confirmation email. If you don&apos;t see 
+                it, please check your spam folder or try resending the confirmation 
+                email.
               </p>
             </CardContent>
           </Card>
