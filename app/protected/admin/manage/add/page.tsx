@@ -14,9 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-export default function AddAdminPage({
-  className
-}: React.ComponentPropsWithoutRef<"div">) {
+export default function AddAdminPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,11 +59,7 @@ export default function AddAdminPage({
   };
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center h-screen${
-        className ? ` ${className}` : ""
-      }`}
-    >
+    <div className='flex flex-col items-center justify-center h-screen'>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Add Admin</CardTitle>
