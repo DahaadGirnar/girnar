@@ -1,13 +1,10 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
 import { createClient } from "@/lib/supabase/server";
-import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Divider from "@/components/ui/divider";
 import Announcements from "@/components/announcements";
-import { hasEnvVars } from "@/lib/utils";
+import Navbar from "@/components/navbar";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -20,14 +17,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center">
       {/* Fixed navbar */}
-      <nav className="w-full fixed top-0 left-0 z-50 flex justify-center border-b h-16 bg-transparent backdrop-blur-2xl">
-        <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
-          <div className="flex gap-5 items-center font-semibold">
-            <Link href={"/"}>Girnar</Link>
-          </div>
-          {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
-        </div>
-      </nav>
+      <Navbar user={null} profile={null} />
       {/* Add margin-top equal to navbar height */}
       <div className="flex-1 w-full flex flex-col gap-20 items-center mt-16">
         <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">

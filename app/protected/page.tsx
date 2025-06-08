@@ -30,8 +30,10 @@ export default async function ProtectedPage() {
         <div className="w-full">
           <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
             <InfoIcon size="16" strokeWidth={2} />
-            Your profile is not complete. Complete your profile
-            <Link href="/protected/profile" className="underline font-semibold">here</Link>
+            <div>
+              Your profile is not complete. Complete your profile{" "}
+              <Link href="/protected/profile" className="underline font-semibold">here</Link>
+            </div>
           </div>
         </div>
       )}

@@ -1,35 +1,40 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
-import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Button } from "@/components/ui/button";
-import { hasEnvVars } from "@/lib/utils";
-import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import Navbar from "@/components/navbar";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createClient();
+
+  const { data } = await supabase.auth.getUser();
+
+  // Fetch user profile from user_profiles table
+  let profile = null;
+  if (data.user) {
+    const { data: fetchedProfile } = await supabase
+      .from("user_profiles")
+      .select("full_name, phone, room_no, admin, entry_no")
+      .eq("id", data.user.id)
+      .single();
+    profile = fetchedProfile;
+  }
+
   return (
     <main className="min-h-screen flex flex-col items-center">
 
       {/* Fixed transparent navbar with blur */}
-      <nav className="w-full fixed top-0 left-0 z-50 flex justify-center border-b border-b-foreground/10 h-16 bg-transparent backdrop-blur-2xl">
-        <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
-          <div className="flex gap-5 items-center font-semibold">
-            <Link href={"/"}>Girnar</Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm">
-              <Link href="/protected/complaints">Complaints</Link>
-            </Button>
-            <Button variant="outline" size="sm">
-              <Link href="/protected/guest-room">Guest Room</Link>
-            </Button>
-            {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        user={
+          data?.user && data.user.email && data.user.id
+            ? { email: data.user.email, id: data.user.id }
+            : null
+        }
+        profile={profile || null}
+      />
+
       {/* Add margin-top equal to navbar height */}
       <div className="flex-1 w-full flex flex-col gap-20 items-center mt-16">
         {/* Make the inner container take full width up to max-w-5xl */}
