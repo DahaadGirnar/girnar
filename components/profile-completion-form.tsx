@@ -107,6 +107,7 @@ export function ProfileCompletionForm({
                   maxLength={10}
                   pattern="[0-9]{10}"
                   inputMode="numeric"
+                  required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -117,6 +118,7 @@ export function ProfileCompletionForm({
                   id="room_no"
                   type="text"
                   placeholder="Your room number"
+                  required
                   value={roomNo}
                   onChange={(e) => setRoomNo(e.target.value)}
                 />
