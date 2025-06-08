@@ -20,9 +20,10 @@ type Announcement = {
 
 interface AnnouncementsProps {
   private?: boolean;
+  adminPrivalege?: boolean; // Optional prop for admin privilege
 }
 
-const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = false }) => {
+const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = false, adminPrivalege = false }) => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +76,13 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
     fetchAnnouncements();
   }, [isPrivate]);
 
+  // Add delete handler
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this announcement?")) return;
+    await supabase.from("announcements").delete().eq("id", id);
+    window.location.reload();
+  };
+
   if (loading) return <div>Loading announcements...</div>;
   if (error) return <div>Error: {error}</div>;
   if (announcements.length === 0) return <div>No announcements found.</div>;
@@ -90,8 +98,22 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
           >
             <div className="flex items-center justify-between mb-1">
               <strong className="text-lg">{a.title}</strong>
-              <span className="text-xs ml-4 whitespace-nowrap">
+              <span className="text-xs ml-4 whitespace-nowrap flex items-center gap-2">
                 {new Date(a.created_at).toLocaleString()}
+                {adminPrivalege && (
+                  <button
+                    type="submit"
+                    title="Delete"
+                    className="ml-1 text-red-500 hover:text-red-700 p-0 bg-transparent border-none"
+                    style={{ background: "none" }}
+                    tabIndex={-1}
+                    onClick={() => handleDelete(a.id)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3m5 0H6" />
+                    </svg>
+                  </button>
+                )}
               </span>
             </div>
             <div className="mb-2">{a.description}</div>

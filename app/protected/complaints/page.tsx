@@ -22,7 +22,7 @@ export default async function ComplaintsPage() {
     <div className="flex-1 w-full flex flex-col gap-12">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-bold text-2xl">Complaints</h2>
-        <Button>
+        <Button asChild size="sm">
           <Link href="/protected/complaints/new">
             New Complaint
           </Link>
@@ -50,8 +50,31 @@ export default async function ComplaintsPage() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <strong className="text-lg">{c.title || "No title"}</strong>
-                  <span className="text-xs ml-4 whitespace-nowrap">
+                  <span className="flex items-center text-xs ml-4 whitespace-nowrap gap-2">
                     {c.created_at ? new Date(c.created_at).toLocaleString() : ""}
+                    {/* Delete button with icon */}
+                    <form
+                      action={async () => {
+                        "use server";
+                        const supabase = await createClient();
+                        await supabase.from("complaints").delete().eq("id", c.id);
+                        // Reload page after delete
+                        redirect("/protected/complaints");
+                      }}
+                      style={{ display: "inline" }}
+                    >
+                      <button
+                        type="submit"
+                        title="Delete"
+                        className="ml-1 text-red-500 hover:text-red-700 p-0 bg-transparent border-none"
+                        style={{ background: "none" }}
+                        tabIndex={-1}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3m5 0H6" />
+                        </svg>
+                      </button>
+                    </form>
                   </span>
                 </div>
                 <div className="mb-2">{c.description || "No description"}</div>
