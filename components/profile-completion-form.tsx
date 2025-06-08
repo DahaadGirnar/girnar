@@ -20,6 +20,7 @@ export function ProfileCompletionForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [fullName, setFullName] = useState("");
+  const [entryNo, setEntryNo] = useState("");
   const [phone, setPhone] = useState("");
   const [roomNo, setRoomNo] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +49,7 @@ export function ProfileCompletionForm({
           full_name: fullName,
           phone,
           room_no: roomNo,
+          entry_no: entryNo,
         });
       if (insertError) throw insertError;
 
@@ -80,6 +82,19 @@ export function ProfileCompletionForm({
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="entry_no">Entry No.</Label>
+                <Input
+                  id="entry_no"
+                  type="text"
+                  placeholder="Your entry number"
+                  minLength={11}
+                  maxLength={11}
+                  required
+                  value={entryNo}
+                  onChange={(e) => setEntryNo(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">

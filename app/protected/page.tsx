@@ -18,7 +18,7 @@ export default async function ProtectedPage() {
   // Fetch user profile from user_profiles table
   const { data: profile } = await supabase
     .from("user_profiles")
-    .select("full_name, phone, room_no")
+    .select("full_name, phone, room_no, admin, entry_no")
     .eq("id", data.user.id)
     .single();
 
@@ -42,17 +42,27 @@ export default async function ProtectedPage() {
         {exists && (
           <>
             <div className="text-sm text-muted-foreground">
+              <div>Entry No.: {profile?.entry_no || "N/A"}</div>
               <div>Room: {profile?.room_no || "N/A"}</div>
               <div>Phone: {profile?.phone || "N/A"}</div>
             </div>
 
             <div className="flex flex-row gap-4 mt-4">
-              <Button size="sm">
-                <Link href="/protected/complaints">Complaints</Link>
-              </Button>
-              <Button size="sm">
-                <Link href="/protected/guest-room">Guest Room</Link>
-              </Button>
+              {!profile?.admin && (
+                <>
+                  <Link href="/protected/complaints">
+                    <Button size="sm">Complaints</Button>
+                  </Link>
+                  <Link href="/protected/guest-room">
+                    <Button size="sm">Guest Room</Button>
+                  </Link>
+                </>
+              )}
+              {profile?.admin && (
+                <Link href="/protected/admin">
+                  <Button size="sm">Admin Panel</Button>
+                </Link>
+              )}
             </div>
           </>
         )}
@@ -60,7 +70,7 @@ export default async function ProtectedPage() {
 
       <Divider />
       {!exists && (<Announcements private={false} />)}
-      { exists && (<Announcements private={true}  />)}
+      {exists && (<Announcements private={true} />)}
     </div>
   );
 }

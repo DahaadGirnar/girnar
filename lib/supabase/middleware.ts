@@ -1,16 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "../utils";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
-
-  // If the env vars are not set, skip middleware check. You can remove this once you setup the project.
-  if (!hasEnvVars) {
-    return supabaseResponse;
-  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,6 +39,30 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Fetch admin property from user_profiles if user exists
+  let isAdmin: boolean | undefined = undefined;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("admin")
+      .eq("id", user.id)
+      .single();
+    if (profile && typeof profile.admin !== "undefined") {
+      isAdmin = profile.admin;
+    }
+  }
+
+  // Prevent non-admin users from accessing /protected/admin routes
+  if (
+    user &&
+    isAdmin === false &&
+    request.nextUrl.pathname.startsWith("/protected/admin")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/protected";
+    return NextResponse.redirect(url);
+  }
+
   if (
     request.nextUrl.pathname !== "/" &&
     !user &&
@@ -62,9 +80,15 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname === "/" &&
     user
   ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/protected";
-    return NextResponse.redirect(url);
+    if (isAdmin) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/protected/admin";
+      return NextResponse.redirect(url);
+    } else {
+      const url = request.nextUrl.clone();
+      url.pathname = "/protected";
+      return NextResponse.redirect(url);
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
