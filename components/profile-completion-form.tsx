@@ -50,6 +50,7 @@ export function ProfileCompletionForm({
           phone,
           room_no: roomNo,
           entry_no: entryNo,
+          email: user.email,
         });
       if (insertError) throw insertError;
 

@@ -35,7 +35,7 @@ export default async function ComplaintsPage() {
         <p className="text-muted-foreground">No complaints found.</p>
       )}
       {!complaintsError && complaints && complaints.length > 0 && (
-        <ul className="space-y-6 w-max-2xl w-full mx-auto">
+        <ul className="space-y-6 max-w-3xl w-full mx-auto">
           {complaints
             .slice()
             .sort((a: { status: "Pending" | "In Progress" | "Closed" }, b: { status: "Pending" | "In Progress" | "Closed" }) => {

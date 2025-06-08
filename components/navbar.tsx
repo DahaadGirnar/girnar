@@ -27,7 +27,7 @@ function useIsMobile() {
 
 export interface NavbarProps {
   user: { email: string, id: string } | null;
-  profile: { full_name?: string } | null;
+  profile: { full_name?: string, admin?: boolean } | null;
 }
 
 const MenuIcon = ({ open, onClick }: { open: boolean; onClick: () => void }) => (
@@ -72,6 +72,11 @@ const MobileMenu = ({
         className="bg-background rounded-lg shadow-lg p-6 flex flex-col gap-4 min-w-[70vw] max-w-xs items-center fixed top-20 right-4 z-50"
         onClick={e => e.stopPropagation()}
       >
+        {profile?.admin && (
+          <Button asChild variant="outline" size="sm" onClick={onClick}>
+            <Link href="/protected/admin">Admin Panel</Link>
+          </Button>
+        )}
         <Button asChild variant="outline" size="sm" onClick={onClick}>
           <Link href="/protected/complaints">Complaints</Link>
         </Button>
@@ -99,6 +104,11 @@ export default function Navbar({ user, profile }: NavbarProps) {
 
           {(user && !isMobile) && (
             <>
+              {profile?.admin && (
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/protected/admin">Admin Panel</Link>
+                </Button>
+              )}
               <Button asChild variant="outline" size="sm">
                 <Link href="/protected/complaints">Complaints</Link>
               </Button>
