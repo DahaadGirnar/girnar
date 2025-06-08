@@ -7,7 +7,7 @@ export interface AuthButtonProps {
   profile: { full_name?: string } | null;
 }
 
-export async function AuthButton({ user, profile }: AuthButtonProps) {
+export function AuthButton({ user, profile }: AuthButtonProps) {
   return user ? (
     <div className="flex items-center gap-4">
       <Button asChild size="sm" variant={"outline"}>
