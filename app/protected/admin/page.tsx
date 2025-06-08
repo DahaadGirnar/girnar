@@ -23,8 +23,6 @@ export default async function AdminPage() {
     redirect("/protected");
   }
 
-  const exists = !!profile;
-
   return (
     <div>
       <h2 className="font-bold text-2xl mb-4">
