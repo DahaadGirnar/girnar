@@ -76,7 +76,7 @@ export default function NewComplaintPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl mx-auto mt-8">
+    <div className="flex flex-col gap-6 mt-8">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">New Complaint</CardTitle>

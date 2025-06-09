@@ -43,7 +43,7 @@ export function ProfileCompletionForm({
 
       // Insert profile data
       const { error: insertError } = await supabase
-        .from("user_profiles")
+        .from("temp_users")
         .upsert({
           id: user.id,
           full_name: fullName,

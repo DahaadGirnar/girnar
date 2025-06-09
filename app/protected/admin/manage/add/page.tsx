@@ -59,8 +59,8 @@ export default function AddAdminPage() {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center h-screen'>
-      <Card className="w-full max-w-md">
+    <div className='flex flex-col gap-6'>
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Add Admin</CardTitle>
           <CardDescription>

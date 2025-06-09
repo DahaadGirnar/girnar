@@ -22,11 +22,18 @@ export default async function ProtectedPage() {
     .eq("id", data.user.id)
     .single();
 
+  const { data: tempProfile } = await supabase
+    .from("temp_users")
+    .select("full_name")
+    .eq("id", data.user.id)
+    .single();
+
+  const tempExists = !!tempProfile;
   const exists = !!profile;
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
-      {!exists && (
+      {(!exists && !tempExists) && (
         <div className="w-full">
           <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
             <InfoIcon size="16" strokeWidth={2} />
@@ -37,9 +44,19 @@ export default async function ProtectedPage() {
           </div>
         </div>
       )}
+      {(!exists && tempExists) && (
+        <div className="w-full">
+          <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
+            <InfoIcon size="16" strokeWidth={2} />
+            <div>
+              Wait for your profile to be approved by the admin.
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col gap-2 items-start">
         <h2 className="font-bold text-2xl mb-4">
-          Welcome {profile?.full_name || data.user.email}!
+          Welcome {(profile?.full_name || tempProfile?.full_name) || data.user.email}!
         </h2>
         {exists && (
           <>
