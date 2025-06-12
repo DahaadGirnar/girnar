@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -15,7 +15,7 @@ type Announcement = {
   created_at: string;
   created_by: string;
 
-  full_name?: string; // This will be populated from user_profiles
+  user_profiles: { full_name?: string }; // This will be populated from user_profiles
 };
 
 interface AnnouncementsProps {
@@ -34,7 +34,7 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
       setError(null);
       let query = supabase
         .from("announcements")
-        .select("*")
+        .select("*, user_profiles(full_name)")
         .order("created_at", { ascending: false });
 
       if (!isPrivate) {
@@ -47,28 +47,7 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
         setError(error.message);
         setAnnouncements([]);
       } else {
-        if (isPrivate) {
-          // For each announcement, fetch full_name from user_profiles using created_by
-          const announcementsWithNames = await Promise.all(
-            (data || []).map(async (a: Announcement) => {
-              let full_name = "Unknown";
-              if (a.created_by) {
-                const { data: profile } = await supabase
-                  .from("user_profiles")
-                  .select("full_name")
-                  .eq("id", a.created_by)
-                  .single();
-                if (profile && profile.full_name) {
-                  full_name = profile.full_name;
-                }
-              }
-              return { ...a, full_name };
-            })
-          );
-          setAnnouncements(announcementsWithNames);
-        } else {
-          setAnnouncements(data || []);
-        }
+        setAnnouncements(data || []);
       }
       setLoading(false);
     };
@@ -121,7 +100,7 @@ const Announcements: React.FC<AnnouncementsProps> = ({ private: isPrivate = fals
               <div
                 className="absolute bottom-2 right-4 text-xs text-gray-500"
               >
-                By: {a.full_name || "Unknown"}
+                By: {a.user_profiles.full_name || "Unknown"}
               </div>
             )}
           </li>
