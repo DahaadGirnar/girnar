@@ -61,7 +61,7 @@ export default async function PendingGuestRoomRequestsPage() {
   const { data: requests, error: reqError } = await supabase
     .from("bookings")
     .select("id, user_id, from_date, to_date, user_profiles(full_name, entry_no, phone)")
-    .neq("status", "confirmed")
+    .eq("is_confirmed", false)
     .order("from_date", { ascending: true });
 
   // Type assertion for requests
@@ -75,7 +75,7 @@ export default async function PendingGuestRoomRequestsPage() {
   const { data: confirmedRequests } = await supabase
     .from("bookings")
     .select("id, user_id, from_date, to_date, user_profiles(full_name, entry_no, phone)")
-    .eq("status", "confirmed")
+    .eq("is_confirmed", true)
     .order("from_date", { ascending: true });
 
   // Type assertion for confirmedRequests

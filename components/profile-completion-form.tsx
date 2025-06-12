@@ -49,8 +49,7 @@ export function ProfileCompletionForm({
           full_name: fullName,
           phone,
           room_no: roomNo,
-          entry_no: entryNo,
-          email: user.email,
+          entry_no: entryNo
         });
       if (insertError) throw insertError;
 
