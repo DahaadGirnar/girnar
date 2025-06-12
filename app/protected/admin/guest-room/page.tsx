@@ -26,6 +26,19 @@ async function rejectRequest(formData: FormData) {
 }
 
 export default async function PendingGuestRoomRequestsPage() {
+  // Define the type for booking/request with user_profiles
+  type BookingRequest = {
+    id: string;
+    user_id: string;
+    from_date: string;
+    to_date: string;
+    user_profiles: {
+      full_name?: string;
+      entry_no?: string;
+      phone?: string;
+    } | null;
+  };
+
   const supabase = await createClient();
 
   const { data, error } = await supabase.auth.getUser();
@@ -47,9 +60,12 @@ export default async function PendingGuestRoomRequestsPage() {
   // Fetch all pending guest room requests (status is not confirmed)
   const { data: requests, error: reqError } = await supabase
     .from("bookings")
-    .select("id, user_id, from_date, to_date")
+    .select("id, user_id, from_date, to_date, user_profiles(full_name, entry_no, phone)")
     .neq("status", "confirmed")
     .order("from_date", { ascending: true });
+
+  // Type assertion for requests
+  const typedRequests = (requests ?? []) as BookingRequest[];
 
   if (reqError) {
     return <div>Error loading guest room requests.</div>;
@@ -58,45 +74,19 @@ export default async function PendingGuestRoomRequestsPage() {
   // Fetch all confirmed guest room bookings
   const { data: confirmedRequests } = await supabase
     .from("bookings")
-    .select("id, user_id, from_date, to_date")
+    .select("id, user_id, from_date, to_date, user_profiles(full_name, entry_no, phone)")
     .eq("status", "confirmed")
     .order("from_date", { ascending: true });
 
-  // Fetch user profiles for confirmed bookings
-  const confirmedUserIds = (confirmedRequests ?? []).map((req) => req.user_id);
-  type UserProfile = { id: string; full_name?: string; entry_no?: string; phone?: string };
-  let confirmedUserProfilesMap: Record<string, UserProfile> = {};
-  if (confirmedUserIds.length > 0) {
-    const { data: confirmedUserProfiles } = await supabase
-      .from("user_profiles")
-      .select("id, full_name, entry_no, phone")
-      .in("id", confirmedUserIds);
-    confirmedUserProfilesMap = (confirmedUserProfiles ?? []).reduce((acc: Record<string, UserProfile>, profile: UserProfile) => {
-      acc[profile.id] = profile;
-      return acc;
-    }, {});
-  }
-
-  // Fetch all user profiles for the user_ids in requests
-  const userIds = (requests ?? []).map((req) => req.user_id);
-  let userProfilesMap: Record<string, UserProfile> = {};
-  if (userIds.length > 0) {
-    const { data: userProfiles } = await supabase
-      .from("user_profiles")
-      .select("id, full_name, entry_no, phone")
-      .in("id", userIds);
-    userProfilesMap = (userProfiles ?? []).reduce((acc: Record<string, UserProfile>, profile: UserProfile) => {
-      acc[profile.id] = profile;
-      return acc;
-    }, {});
-  }
+  // Type assertion for confirmedRequests
+  const typedConfirmedRequests = (confirmedRequests ?? []) as BookingRequest[];
 
   return (
     <div>
       {/* Confirmed Bookings Table */}
-      {(confirmedRequests && confirmedRequests.length > 0) && (
+      {(typedConfirmedRequests && typedConfirmedRequests.length > 0) && (
         <>
-          <h2 className="font-bold text-2xl mb-4">Confirmed Guest Room Bookings ({confirmedRequests.length})</h2>
+          <h2 className="font-bold text-2xl mb-4">Confirmed Guest Room Bookings ({typedConfirmedRequests.length})</h2>
           <div className="overflow-x-auto mt-2 mb-8">
             <table className="min-w-full border border-green-300">
               <thead>
@@ -109,13 +99,12 @@ export default async function PendingGuestRoomRequestsPage() {
                 </tr>
               </thead>
               <tbody>
-                {confirmedRequests.map((req) => {
-                  const userProfile = confirmedUserProfilesMap[String(req.user_id)] || {};
+                {typedConfirmedRequests.map((req) => {
                   return (
                     <tr key={req.id}>
-                      <td className="px-4 py-2 border">{userProfile.full_name ?? "-"}</td>
-                      <td className="px-4 py-2 border">{userProfile.entry_no ?? "-"}</td>
-                      <td className="px-4 py-2 border">{userProfile.phone ?? "-"}</td>
+                      <td className="px-4 py-2 border">{req.user_profiles?.full_name ?? "-"}</td>
+                      <td className="px-4 py-2 border">{req.user_profiles?.entry_no ?? "-"}</td>
+                      <td className="px-4 py-2 border">{req.user_profiles?.phone ?? "-"}</td>
                       <td className="px-4 py-2 border">{req.from_date}</td>
                       <td className="px-4 py-2 border">{req.to_date}</td>
                     </tr>
@@ -127,9 +116,9 @@ export default async function PendingGuestRoomRequestsPage() {
         </>
       )}
       {/* Pending Requests Table */}
-      {(requests && requests.length > 0) && (
+      {(typedRequests && typedRequests.length > 0) && (
         <>
-          <h2 className="font-bold text-2xl mb-4">Pending Guest Room Requests ({requests.length})</h2>
+          <h2 className="font-bold text-2xl mb-4">Pending Guest Room Requests ({typedRequests.length})</h2>
           <div className="overflow-x-auto mt-2">
             <table className="min-w-full border border-gray-300">
               <thead>
@@ -143,13 +132,12 @@ export default async function PendingGuestRoomRequestsPage() {
                 </tr>
               </thead>
               <tbody>
-                {requests.map((req) => {
-                  const userProfile = userProfilesMap[String(req.user_id)] || {};
+                {typedRequests.map((req) => {
                   return (
                     <tr key={req.id}>
-                      <td className="px-4 py-2 border">{userProfile.full_name ?? "-"}</td>
-                      <td className="px-4 py-2 border">{userProfile.entry_no ?? "-"}</td>
-                      <td className="px-4 py-2 border">{userProfile.phone ?? "-"}</td>
+                      <td className="px-4 py-2 border">{req.user_profiles?.full_name ?? "-"}</td>
+                      <td className="px-4 py-2 border">{req.user_profiles?.entry_no ?? "-"}</td>
+                      <td className="px-4 py-2 border">{req.user_profiles?.phone ?? "-"}</td>
                       <td className="px-4 py-2 border">{req.from_date}</td>
                       <td className="px-4 py-2 border">{req.to_date}</td>
                       <td className="px-4 py-2 border text-center flex gap-2 justify-center">
@@ -186,7 +174,7 @@ export default async function PendingGuestRoomRequestsPage() {
           </div>
         </>
       )}
-      {(!confirmedRequests && !requests) && (
+      {(!typedConfirmedRequests && !typedRequests) && (
         <div>
           <h2 className="font-bold text-2xl mb-4">No Guest Room Requests</h2>
         </div>
