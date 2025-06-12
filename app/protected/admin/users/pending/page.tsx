@@ -12,7 +12,7 @@ async function confirmUser(formData: FormData) {
   const { data: tempUser } = await supabase.from("temp_users").select("*").eq("id", userId).single();
   if (!tempUser) return;
   // Insert into user_profiles
-  await supabase.from("user_profiles").upsert({ ...tempUser });
+  await supabase.from("user_profiles").insert({ ...tempUser });
   // Delete from temp_users
   await supabase.from("temp_users").delete().eq("id", userId);
   redirect("/protected/admin/users/pending");
