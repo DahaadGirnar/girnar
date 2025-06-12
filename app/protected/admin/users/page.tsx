@@ -20,6 +20,7 @@ async function deleteUser(formData: FormData) {
 
 export default async function UsersManagementPage() {
   const supabase = await createClient();
+  const adminClient = createAdminClient();
 
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
@@ -40,11 +41,35 @@ export default async function UsersManagementPage() {
   // Fetch all non-admin users from user_profiles
   const { data: allUsers, error: usersError } = await supabase
     .from("user_profiles")
-    .select("id, full_name, phone, room_no, admin, entry_no, email")
+    .select("id, full_name, phone, room_no, admin, entry_no")
     .neq("admin", true);
 
   if (usersError) {
-    return <div>Error loading users.</div>;
+    return (
+      <div>
+        <h1>Error loading users.</h1>
+        <p>{usersError.message}</p>
+      </div>
+    );
+  }
+
+  // Fetch emails from auth.users using admin client
+  let emailsMap: Record<string, string> = {};
+  if (allUsers && allUsers.length > 0) {
+    const userIds = allUsers.map((u) => u.id);
+    // Supabase admin API: list users (max 1000 at a time)
+    const { data: usersList, error: usersListError } = await adminClient.auth.admin.listUsers({
+      page: 1,
+      perPage: 1000,
+    });
+    if (!usersListError && usersList?.users) {
+      emailsMap = usersList.users.reduce((acc: Record<string, string>, user) => {
+        if (userIds.includes(user.id) && user.email) {
+          acc[user.id] = user.email;
+        }
+        return acc;
+      }, {} as Record<string, string>);
+    }
   }
 
   return (
@@ -76,7 +101,7 @@ export default async function UsersManagementPage() {
                 <td className="px-4 py-2 border">{user.full_name}</td>
                 <td className="px-4 py-2 border">{user.entry_no}</td>
                 <td className="px-4 py-2 border">{user.phone}</td>
-                <td className="px-4 py-2 border">{user.email}</td>
+                <td className="px-4 py-2 border">{emailsMap[user.id] || "-"}</td>
                 <td className="px-4 py-2 border">{user.room_no}</td>
                 <td className="px-4 py-2 border text-center">
                   <form action={deleteUser}>
