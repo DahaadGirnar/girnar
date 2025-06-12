@@ -41,6 +41,9 @@ export default async function AdminPage() {
         <Button asChild size="sm">
           <Link href="/protected/admin/users">Manage Users</Link>
         </Button>
+        <Button asChild size="sm">
+          <Link href="/protected/admin/guest-room">Guest Rooms Bookings</Link>
+        </Button>
       </div>
     </div>
   );
