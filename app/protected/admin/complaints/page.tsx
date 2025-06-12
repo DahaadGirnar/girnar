@@ -22,9 +22,7 @@ export default function ComplaintsManagementPage() {
     status: "Pending" | "In Progress" | "Closed";
     category?: string;
     created_at?: string;
-    user_id: string;
-    user_profile?: {
-      id: string;
+    user_profiles?: {
       full_name?: string;
       entry_no?: string;
       room_no?: string;
@@ -49,24 +47,12 @@ export default function ComplaintsManagementPage() {
       // Fetch complaints
       const { data: complaintsData, error: complaintsError } = await supabase
         .from("complaints")
-        .select("*");
+        .select("*, user_profiles(full_name, entry_no, room_no)");
 
-      // Fetch user profiles
-      const { data: profilesData, error: profilesError } = await supabase
-        .from("user_profiles")
-        .select("id, full_name, entry_no, room_no");
-      if (complaintsError || profilesError) {
+      if (complaintsError) {
         setComplaintsError("Failed to load complaints.");
       } else {
-        // Join complaints with user_profile info
-        const profilesMap = new Map(
-          (profilesData || []).map((p) => [p.id, p])
-        );
-        const joined = (complaintsData || []).map((c) => ({
-          ...c,
-          user_profile: profilesMap.get(c.user_id) || null,
-        }));
-        setComplaints(joined);
+        setComplaints(complaintsData || []);
       }
     };
     fetchData();
@@ -156,13 +142,13 @@ export default function ComplaintsManagementPage() {
               <div className="">{c.description || "No description"}</div>
               <div className="flex items-center gap-4 text-xs text-gray-600 mb-1">
                 <span>
-                  <b>Name:</b> {c.user_profile?.full_name || "N/A"}
+                  <b>Name:</b> {c.user_profiles?.full_name || "N/A"}
                 </span>
                 <span>
-                  <b>Entry No.:</b> {c.user_profile?.entry_no || "N/A"}
+                  <b>Entry No.:</b> {c.user_profiles?.entry_no || "N/A"}
                 </span>
                 <span>
-                  <b>Room No.:</b> {c.user_profile?.room_no || "N/A"}
+                  <b>Room No.:</b> {c.user_profiles?.room_no || "N/A"}
                 </span>
               </div>
               <div className="absolute bottom-2 right-4 text-xs text-gray-500">
