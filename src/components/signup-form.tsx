@@ -17,34 +17,47 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link";
 
-import { useUser } from "@/hooks/use-user";
-
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { updateUser } = useUser();
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
+    // Check if email ends with 'iitd.ac.in'
+    // if (!email.trim().toLowerCase().endsWith("iitd.ac.in")) {
+    //   setError("You can only sign-up using an IIT Delhi email address");
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+    if (password !== repeatPassword) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: window.location.origin,
+        },
       });
       if (error) throw error;
-      updateUser();
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/user");
+      router.push("/auth/signup-success");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -62,7 +75,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSignup}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -76,15 +89,7 @@ export function LoginForm({
                 />
               </div>
               <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
@@ -93,17 +98,27 @@ export function LoginForm({
                   required
                 />
               </div>
+              <div className="grid gap-3">
+                <Label htmlFor="repeat-password">Repeat Password</Label>
+                <Input
+                  id="repeat-password"
+                  type="password"
+                  value={repeatPassword}
+                  onChange={(e) => setRepeatPassword(e.target.value)}
+                  required
+                />
+              </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Login"}
+                  {isLoading ? "Creating an account..." : "Sign up"}
                 </Button>
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/signup" className="underline underline-offset-4">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/auth/login" className="underline underline-offset-4">
+                Log in
               </Link>
             </div>
           </form>
@@ -112,3 +127,4 @@ export function LoginForm({
     </div>
   )
 }
+

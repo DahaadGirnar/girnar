@@ -17,7 +17,7 @@ export default function PrivatePage() {
     <>
       {loading && <p>Loading user data...</p>}
       {!loading && !user && <p>Please log in</p>}
-      {!loading && user && <p>Welcome, {user.User.email}!</p>}
+      {!loading && user && <p>Welcome, {user.user.email}!</p>}
     </>
   );
 }

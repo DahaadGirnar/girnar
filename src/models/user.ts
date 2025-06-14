@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
 
 export interface UserModel {
-  User: User;
+  user: User;
+  email: string;
 }

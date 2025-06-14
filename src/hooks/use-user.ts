@@ -29,7 +29,10 @@ const getUser = async () => {
     return null;
   }
 
-  return { User: data.user };
+  return {
+    user: data.user,
+    email: data.user.email || "",
+  };
 };
 
 export function UserProvider({ children }: { children: ReactNode }) {
