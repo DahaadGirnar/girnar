@@ -1,14 +1,23 @@
-import { redirect } from 'next/navigation'
+'use client';
 
-import { createClient } from '@/utils/supabase/server'
+import { useEffect } from 'react';
+import { useUser } from "@/hooks/use-user"
 
-export default async function PrivatePage() {
-  const supabase = await createClient()
+export default function PrivatePage() {
+  const { user, updateUser, loading } = useUser();
 
-  const { data, error } = await supabase.auth.getUser()
-  // if (error || !data?.user) {
-  //   redirect('/auth/login')
-  // }
+  useEffect(() => {
+    if (!user) {
+      updateUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  return <p>Hello {data.user.email}</p>
+  return (
+    <>
+      {loading && <p>Loading user data...</p>}
+      {!loading && !user && <p>Please log in</p>}
+      {!loading && user && <p>Welcome, {user.User.email}!</p>}
+    </>
+  );
 }

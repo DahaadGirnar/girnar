@@ -17,6 +17,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link";
 
+import { useUser } from "@/hooks/use-user";
+
 export function LoginForm({
   className,
   ...props
@@ -25,6 +27,7 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { updateUser } = useUser();
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -39,6 +42,7 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
+      updateUser();
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/user");
     } catch (error: unknown) {
