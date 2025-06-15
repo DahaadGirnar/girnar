@@ -13,33 +13,38 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+import { UserPageSection } from "@/models/UserPageSections"
+import { useUserPage } from "@/hooks/use-user-page"
+
 export function NavUserActions() {
+  const { setSection } = useUserPage();
+
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
+          <SidebarMenuButton asChild onClick={() => setSection(UserPageSection.Announcements)}>
             <div className="flex items-center gap-2">
               <Megaphone />
-              <span>Announcements</span>
+              <span className="select-none">Announcements</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
 
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
+          <SidebarMenuButton asChild onClick={() => setSection(UserPageSection.Complaints)}>
             <div className="flex items-center gap-2">
               <AlertTriangle />
-              <span>Complaints</span>
+              <span className="select-none">Complaints</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
 
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
+          <SidebarMenuButton asChild onClick={() => setSection(UserPageSection.GuestRoomBooking)}>
             <div className="flex items-center gap-2">
               <BedDouble />
-              <span>Guest Room Booking</span>
+              <span className="select-none">Guest Room Booking</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>

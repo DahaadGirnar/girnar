@@ -22,6 +22,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+import { redirect } from "next/navigation"
+import { createClient } from '@/utils/supabase/client'
+import { User2 } from "lucide-react"
+import { useUserPage } from "@/hooks/use-user-page"
+import { UserPageSection } from "@/models/UserPageSections"
+
 export function NavUser({
   user,
 }: {
@@ -32,6 +38,19 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const { setSection } = useUserPage()
+
+  const logout = async () => {
+    const supabase = createClient()
+
+    const { error } = await supabase.auth.signOut()
+
+    if (error) {
+      redirect('/auth/error')
+    }
+
+    redirect('/login')
+  }
 
   return (
     <SidebarMenu>
@@ -72,6 +91,12 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
+              <SidebarMenuButton onClick={() => setSection(UserPageSection.Profile)}>
+                <User2 />
+                Profile
+              </SidebarMenuButton>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
               <LogOut />
               Log out
             </DropdownMenuItem>
