@@ -5,12 +5,13 @@ import {
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb"
 
 import { useUserPage } from "@/hooks/use-user-page";
 
 export default function UserPageBreadcrumb() {
-  const { section } = useUserPage();
+  const { section, subsection } = useUserPage();
   
   return (
     <Breadcrumb>
@@ -18,6 +19,14 @@ export default function UserPageBreadcrumb() {
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbPage>{section}</BreadcrumbPage>
         </BreadcrumbItem>
+        {subsection && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{subsection}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

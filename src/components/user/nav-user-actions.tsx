@@ -3,22 +3,32 @@
 import {
   Megaphone,
   AlertTriangle,
-  BedDouble
+  BedDouble,
+  ChevronRight
 } from "lucide-react"
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton
 } from "@/components/ui/sidebar"
 
 import { useUser } from "@/hooks/use-user"
-import { UserPageSection } from "@/models/UserPageSections"
+import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections"
 import { useUserPage } from "@/hooks/use-user-page"
 
 export function NavUserActions() {
-  const { setSection } = useUserPage();
+  const { setSection, setSubsection } = useUserPage();
   const { user } = useUser();
 
   return (
@@ -27,7 +37,10 @@ export function NavUserActions() {
         {user?.verified && (
           <>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild onClick={() => setSection(UserPageSection.Announcements)}>
+              <SidebarMenuButton asChild onClick={() => {
+                setSection(UserPageSection.Announcements);
+                setSubsection(null);
+              }}>
                 <div className="flex items-center gap-2">
                   <Megaphone />
                   <span className="select-none">Announcements</span>
@@ -35,17 +48,57 @@ export function NavUserActions() {
               </SidebarMenuButton>
             </SidebarMenuItem>
 
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild onClick={() => setSection(UserPageSection.Complaints)}>
-                <div className="flex items-center gap-2">
-                  <AlertTriangle />
-                  <span className="select-none">Complaints</span>
-                </div>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <Collapsible
+              asChild
+              className="group/collapsible"
+            >
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <AlertTriangle />
+                    <span>Complaints</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.Complaints);
+                            setSubsection(UserPageSubsection.Existing);
+                          }}
+                        >
+                          Existing
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.Complaints);
+                            setSubsection(UserPageSubsection.New);
+                          }}
+                        >
+                          New
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
 
             <SidebarMenuItem>
-              <SidebarMenuButton asChild onClick={() => setSection(UserPageSection.GuestRoomBooking)}>
+              <SidebarMenuButton asChild onClick={() => {
+                setSection(UserPageSection.GuestRoomBooking);
+                setSubsection(null);
+              }}>
                 <div className="flex items-center gap-2">
                   <BedDouble />
                   <span className="select-none">Guest Room Booking</span>

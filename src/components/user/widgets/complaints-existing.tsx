@@ -3,8 +3,10 @@
 import { useUser } from "@/hooks/use-user";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+
+import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections";
+import { useUserPage } from "@/hooks/use-user-page";
 
 interface Complaint {
   id: string;
@@ -16,8 +18,9 @@ interface Complaint {
   // ...add other fields as needed
 }
 
-export default function ComplaintsWidget() {
+export default function ExistingComplaintsWidget() {
   const { user } = useUser();
+  const { setSection, setSubsection } = useUserPage();
   const supabase = createClient();
 
   const [complaints, setComplaints] = useState<Complaint[] | null>(null);
@@ -59,10 +62,11 @@ export default function ComplaintsWidget() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-bold text-2xl">Complaints</h2>
-        <Button asChild size="sm">
-          <Link href="/protected/complaints/new">
-            New Complaint
-          </Link>
+        <Button size="sm" onClick={() => {
+          setSection(UserPageSection.Complaints);
+          setSubsection(UserPageSubsection.New);
+        }}>
+          New Complaint
         </Button>
       </div>
       {complaintsError && (

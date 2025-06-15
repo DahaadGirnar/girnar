@@ -125,22 +125,22 @@ export default function ProfileWidget() {
               onChange={(e) => setPhone(e.target.value)}
               required
             />
-            <div className="grid gap-3">
-              <Label htmlFor="room-number">Room Number</Label>
-              <Input
-                id="room-number"
-                type="text"
-                value={roomNumber}
-                onChange={(e) => setRoomNumber(e.target.value)}
-                required
-              />
-            </div>
-            {error && <p className="text-sm text-red-500">{error}</p>}
-            <div className="flex flex-col gap-3">
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Updating..." : "Update Profile"}
-              </Button>
-            </div>
+          </div>
+          <div className="grid gap-3">
+            <Label htmlFor="room-number">Room Number</Label>
+            <Input
+              id="room-number"
+              type="text"
+              value={roomNumber}
+              onChange={(e) => setRoomNumber(e.target.value)}
+              required
+            />
+          </div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          <div className="flex flex-col gap-3">
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Updating..." : "Update Profile"}
+            </Button>
           </div>
         </div>
       </form>
