@@ -25,13 +25,28 @@ const getUser = async () => {
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data?.user) {
-    console.error("Error fetching user:", error);
     return null;
   }
 
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .eq('id', data.user.id)
+    .single();
+
+  if (!profile) {
+    return {
+      id: data.user.id,
+      email: data.user.email,
+      profile_created: false,
+    }
+  }
+
   return {
-    user: data.user,
-    email: data.user.email || "",
+    id: data.user.id,
+    email: data.user.email,
+    profile_created: true,
+    ...profile,
   };
 };
 

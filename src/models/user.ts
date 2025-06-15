@@ -1,7 +1,13 @@
-import { User } from "@supabase/supabase-js";
-
 export interface UserModel {
-  user: User;
-  name?: string;
+  id: string;
   email: string;
+  profile_created: boolean;
+  
+  // Part of Profile
+  full_name?: string;
+  verified?: boolean;
+  admin?: boolean;
+  phone?: string;
+  room_no?: string;
+  entry_no?: string;
 }

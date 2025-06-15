@@ -15,6 +15,8 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { UserPageProvider } from '@/hooks/use-user-page';
 import { redirect } from 'next/navigation';
 
+import UserWidgetManager from '@/components/user/widget-manager';
+
 export default function Page() {
   const { user, updateUser, loading } = useUser();
 
@@ -49,18 +51,13 @@ export default function Page() {
             </div>
             <div className="ml-auto flex items-center gap-2 pr-4">
               <div className="hidden md:block">
-                <span className="text-sm text-muted-foreground">{user?.name ?? user?.email}</span>
+                <span className="text-sm text-muted-foreground">{user?.full_name ?? user?.email}</span>
               </div>
               <ThemeSwitcher />
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-            </div>
-            <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+            <UserWidgetManager />
           </div>
         </SidebarInset>
       </SidebarProvider>
