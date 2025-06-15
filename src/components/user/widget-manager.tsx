@@ -5,9 +5,10 @@ import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections";
 
 import GeneralWidget from "./widgets/general";
 import ProfileWidget from "./widgets/profile";
-import AnnouncementsWidget from "./widgets/announcements";
+import ExistingAnnouncementsWidget from "./widgets/announcements-existing";
 import ExistingComplaintsWidget from "./widgets/complaints-existing";
 import NewComplaintsWidget from "./widgets/complaints-new";
+import ReviewComplaintsWidget from "./widgets/complaints-review";
 import GuestRoomBooking from "./widgets/guest-room-booking";
 
 export default function UserWidgetManager() {
@@ -17,11 +18,12 @@ export default function UserWidgetManager() {
     <>
       {(section === UserPageSection.General) && <GeneralWidget />}
       {(section === UserPageSection.Profile) && <ProfileWidget />}
-      {(section === UserPageSection.Announcements) && <AnnouncementsWidget />}
+      {(section === UserPageSection.Announcements) && <ExistingAnnouncementsWidget />}
       {(section === UserPageSection.Complaints) && (
         <>
-          {(subsection === UserPageSubsection.Existing) && <ExistingComplaintsWidget />}
-          {(subsection === UserPageSubsection.New) && <NewComplaintsWidget />}
+          {( subsection === UserPageSubsection.Existing ) && <ExistingComplaintsWidget /> }
+          {( subsection === UserPageSubsection.New      ) && <NewComplaintsWidget />      }
+          {( subsection === UserPageSubsection.Review   ) && <ReviewComplaintsWidget />   }
         </>
       )}
       {(section === UserPageSection.GuestRoomBooking) && <GuestRoomBooking />}

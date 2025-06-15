@@ -15,6 +15,7 @@ import {
 
 import {
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -33,6 +34,9 @@ export function NavUserActions() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      {user?.admin && (
+        <SidebarGroupLabel>User Actions</SidebarGroupLabel>
+      )}
       <SidebarMenu>
         {user?.verified && (
           <>
@@ -89,6 +93,22 @@ export function NavUserActions() {
                         </span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
+
+                    {user?.admin && (
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <span
+                            className="select-none"
+                            onClick={() => {
+                              setSection(UserPageSection.Complaints);
+                              setSubsection(UserPageSubsection.Review);
+                            }}
+                          >
+                            Review
+                          </span>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>

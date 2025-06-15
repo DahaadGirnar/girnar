@@ -15,7 +15,7 @@ type Announcement = {
   user_profiles: { full_name?: string }; // This will be populated from user_profiles
 };
 
-export default function AnnouncementsWidget() {
+export default function ExistingAnnouncementsWidget() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

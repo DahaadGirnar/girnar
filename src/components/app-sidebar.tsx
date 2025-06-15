@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import { NavUserActions } from "@/components/user/nav-user-actions"
+import { NavAdminActions } from "@/components/user/nav-admin-actions"
 import { NavUser } from "@/components/user/nav-user"
 import {
   Sidebar,
@@ -37,6 +38,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent>
         <NavUserActions />
+        {user?.admin && <NavAdminActions />}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={{
