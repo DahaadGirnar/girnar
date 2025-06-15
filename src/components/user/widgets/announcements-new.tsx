@@ -54,7 +54,7 @@ export default function NewAnnouncementsWidget() {
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-2xl font-semibold">Your Profile:</h2>
+      <h2 className="text-2xl font-semibold">Make new Announcement</h2>
       <form onSubmit={makeAnnouncement} className="mt-4">
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">
