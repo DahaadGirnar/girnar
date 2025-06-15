@@ -2,7 +2,6 @@ export enum UserPageSection {
   General = "General",
   Profile = "Profile",
   Announcements = "Announcements",
-  MakeAnnouncements = "Make Announcements",
   Complaints = "Complaints",
   GuestRoomBooking = "Guest Room Booking",
 }
@@ -20,7 +19,6 @@ export const SectionSubsections: Record<UserPageSection, UserPageSubsection[]> =
     UserPageSubsection.Existing,
     UserPageSubsection.New
   ],
-  [UserPageSection.MakeAnnouncements]: [],
   [UserPageSection.Complaints]: [
     UserPageSubsection.New,
     UserPageSubsection.Existing,

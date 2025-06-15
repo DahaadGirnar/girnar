@@ -30,8 +30,8 @@ export function NavAdminActions() {
           <>
             <SidebarMenuItem>
               <SidebarMenuButton asChild onClick={() => {
-                setSection(UserPageSection.MakeAnnouncements);
-                setSubsection(null);
+                setSection(UserPageSection.Announcements);
+                setSubsection(UserPageSubsection.New);
               }}>
                 <div className="flex items-center gap-2">
                   <Megaphone />
