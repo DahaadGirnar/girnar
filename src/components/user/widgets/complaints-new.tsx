@@ -53,6 +53,8 @@ export default function NewComplaintsWidget() {
           // status is default 'Pending'
         });
       if (insertError) throw insertError;
+      setSection(UserPageSection.Complaints);
+      setSubsection(UserPageSubsection.Existing);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -63,8 +65,6 @@ export default function NewComplaintsWidget() {
       }
     } finally {
       setIsLoading(false);
-      setSection(UserPageSection.Complaints);
-      setSubsection(UserPageSubsection.Existing);
     }
   };
 

@@ -71,6 +71,7 @@ export default function ProfileWidget() {
     if (upsertError) {
       setError(upsertError.message);
     }
+    
     setIsLoading(false);
     updateUser(); // Refresh user data
   }

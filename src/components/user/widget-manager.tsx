@@ -8,6 +8,7 @@ import ProfileWidget from "./widgets/profile";
 import AnnouncementsWidget from "./widgets/announcements";
 import ExistingComplaintsWidget from "./widgets/complaints-existing";
 import NewComplaintsWidget from "./widgets/complaints-new";
+import GuestRoomBooking from "./widgets/guest-room-booking";
 
 export default function UserWidgetManager() {
   const { section, subsection } = useUserPage();
@@ -23,6 +24,7 @@ export default function UserWidgetManager() {
           {(subsection === UserPageSubsection.New) && <NewComplaintsWidget />}
         </>
       )}
+      {(section === UserPageSection.GuestRoomBooking) && <GuestRoomBooking />}
     </>
   );
 }
