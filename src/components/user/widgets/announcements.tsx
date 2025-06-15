@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useUser } from "@/hooks/use-user";
 
@@ -21,36 +21,36 @@ export default function AnnouncementsWidget() {
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
 
-  useEffect(() => {
-    const fetchAnnouncements = async () => {
-      const supabase = createClient();
-      setLoading(true);
-      setError(null);
+  const fetchAnnouncements = async () => {
+    const supabase = createClient();
+    setLoading(true);
+    setError(null);
 
-      const { data, error } = await supabase
-        .from("announcements")
-        .select("*, user_profiles(full_name)")
-        .order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("announcements")
+      .select("*, user_profiles(full_name)")
+      .order("created_at", { ascending: false });
 
-      if (error) {
-        setError(error.message);
-        setAnnouncements([]);
-      } else {
-        setAnnouncements(data || []);
-      }
-      setLoading(false);
-    };
+    if (error) {
+      setError(error.message);
+      setAnnouncements([]);
+    } else {
+      setAnnouncements(data || []);
+    }
+    setLoading(false);
+  };
 
-    fetchAnnouncements();
-  }, []);
-
-  // Add delete handler
-  const handleDelete = async (id: string) => {
+  // Move handleDelete into useCallback for stability
+  const handleDelete = useCallback(async (id: string) => {
     if (!confirm("Are you sure you want to delete this announcement?")) return;
     const supabase = createClient();
     await supabase.from("announcements").delete().eq("id", id);
-    window.location.reload();
-  };
+    fetchAnnouncements(); // Refetch announcements after delete
+  }, []);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
 
   return (
     <div>

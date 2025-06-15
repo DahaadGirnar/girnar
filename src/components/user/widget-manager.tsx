@@ -6,6 +6,7 @@ import { UserPageSection } from "@/models/UserPageSections";
 import GeneralWidget from "./widgets/general";
 import ProfileWidget from "./widgets/profile";
 import AnnouncementsWidget from "./widgets/announcements";
+import ComplaintsWidget from "./widgets/complaints";
 
 export default function UserWidgetManager() {
   const { section } = useUserPage();
@@ -15,6 +16,7 @@ export default function UserWidgetManager() {
       {(section === UserPageSection.General) && <GeneralWidget />}
       {(section === UserPageSection.Profile) && <ProfileWidget />}
       {(section === UserPageSection.Announcements) && <AnnouncementsWidget />}
+      {(section === UserPageSection.Complaints) && <ComplaintsWidget />}
     </>
   );
 }
