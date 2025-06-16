@@ -11,19 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 
-type Complaint = {
-  id: string;
-  title?: string;
-  description?: string;
-  status: "Pending" | "In Progress" | "Closed";
-  category?: string;
-  created_at?: string;
-  user_profiles?: {
-    full_name?: string;
-    entry_no?: string;
-    room_no?: string;
-  } | null;
-};
+import { Complaint } from "@/models/Complaint";
 
 export default function ReviewComplaintsWidget() {
   const [complaints, setComplaints] = useState<Complaint[]>([]);

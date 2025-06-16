@@ -10,7 +10,9 @@ import NewAnnouncementsWidget from "./widgets/announcements-new";
 import ExistingComplaintsWidget from "./widgets/complaints-existing";
 import NewComplaintsWidget from "./widgets/complaints-new";
 import ReviewComplaintsWidget from "./widgets/complaints-review";
-import GuestRoomBooking from "./widgets/guest-room-booking";
+import GuestRoomBookingNew from "./widgets/guest-room-booking-new";
+import GuestRoomBookingReview from "./widgets/guest-room-booking-review";
+import GuestRoomBookingExisting from "./widgets/guest-room-booking-existing";
 
 export default function UserWidgetManager() {
   const { section, subsection } = useUserPage();
@@ -32,7 +34,13 @@ export default function UserWidgetManager() {
           {(subsection === UserPageSubsection.Review) && <ReviewComplaintsWidget />}
         </>
       )}
-      {(section === UserPageSection.GuestRoomBooking) && <GuestRoomBooking />}
+      {(section === UserPageSection.GuestRoomBooking) && (
+        <>
+          {(subsection === UserPageSubsection.New) && <GuestRoomBookingNew />}
+          {(subsection === UserPageSubsection.Existing) && <GuestRoomBookingExisting />}
+          {(subsection === UserPageSubsection.Review) && <GuestRoomBookingReview />}
+        </>
+      )}
     </>
   );
 }

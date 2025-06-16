@@ -4,6 +4,7 @@ export enum UserPageSection {
   Announcements = "Announcements",
   Complaints = "Complaints",
   GuestRoomBooking = "Guest Room Booking",
+  UserManagement = "User Management",
 }
 
 export enum UserPageSubsection {
@@ -24,5 +25,13 @@ export const SectionSubsections: Record<UserPageSection, UserPageSubsection[]> =
     UserPageSubsection.Existing,
     UserPageSubsection.Review
   ],
-  [UserPageSection.GuestRoomBooking]: [],
+  [UserPageSection.GuestRoomBooking]: [
+    UserPageSubsection.New,
+    UserPageSubsection.Existing,
+    UserPageSubsection.Review,
+  ],
+  [UserPageSection.UserManagement]: [
+    UserPageSubsection.New,
+    UserPageSubsection.Existing,
+  ],
 }

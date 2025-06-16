@@ -117,7 +117,7 @@ export function NavUserActions() {
             <SidebarMenuItem>
               <SidebarMenuButton asChild onClick={() => {
                 setSection(UserPageSection.GuestRoomBooking);
-                setSubsection(null);
+                setSubsection(UserPageSubsection.New);
               }}>
                 <div className="flex items-center gap-2">
                   <BedDouble />

@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function GuestRoomBooking() {
+export default function GuestRoomBookingNew() {
   const { user } = useUser();
 
   const [guestName, setGuestName] = useState("");

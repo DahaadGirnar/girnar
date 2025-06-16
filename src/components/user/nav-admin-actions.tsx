@@ -3,15 +3,25 @@
 import {
   Megaphone,
   AlertTriangle,
-  BedDouble
+  BedDouble,
+  ChevronRight
 } from "lucide-react"
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton
 } from "@/components/ui/sidebar"
 
 import { useUser } from "@/hooks/use-user"
@@ -52,17 +62,97 @@ export function NavAdminActions() {
               </SidebarMenuButton>
             </SidebarMenuItem>
 
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild onClick={() => {
-                setSection(UserPageSection.GuestRoomBooking);
-                setSubsection(null);
-              }}>
-                <div className="flex items-center gap-2">
-                  <BedDouble />
-                  <span className="select-none">Review Guest Room Booking</span>
-                </div>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <Collapsible
+              asChild
+              className="group/collapsible"
+            >
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <BedDouble />
+                    <span>User Management</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.UserManagement);
+                            setSubsection(UserPageSubsection.Existing);
+                          }}
+                        >
+                          Existing
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.GuestRoomBooking);
+                            setSubsection(UserPageSubsection.New);
+                          }}
+                        >
+                          New
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+
+            <Collapsible
+              asChild
+              className="group/collapsible"
+            >
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <BedDouble />
+                    <span>Guest Room Booking</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.GuestRoomBooking);
+                            setSubsection(UserPageSubsection.Existing);
+                          }}
+                        >
+                          Existing
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.GuestRoomBooking);
+                            setSubsection(UserPageSubsection.Review);
+                          }}
+                        >
+                          Review
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
           </>
         )}
       </SidebarMenu>
