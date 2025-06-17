@@ -35,11 +35,11 @@ export function SignupForm({
     setError(null);
 
     // Check if email ends with 'iitd.ac.in'
-    // if (!email.trim().toLowerCase().endsWith("iitd.ac.in")) {
-    //   setError("You can only sign-up using an IIT Delhi email address");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (!email.trim().toLowerCase().endsWith("iitd.ac.in")) {
+      setError("You can only sign-up using an IIT Delhi email address");
+      setIsLoading(false);
+      return;
+    }
 
     if (password !== repeatPassword) {
       setError("Passwords do not match");

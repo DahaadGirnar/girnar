@@ -5,7 +5,8 @@ import {
   AlertTriangle,
   BedDouble,
   ChevronRight,
-  User
+  User,
+  Shield
 } from "lucide-react"
 
 import {
@@ -143,6 +144,52 @@ export function NavAdminActions() {
                           className="select-none"
                           onClick={() => {
                             setSection(UserPageSection.UserManagement);
+                            setSubsection(UserPageSubsection.New);
+                          }}
+                        >
+                          New
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+
+            <Collapsible
+              asChild
+              className="group/collapsible"
+            >
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <Shield />
+                    <span>Admin Management</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.AdminManagement);
+                            setSubsection(UserPageSubsection.Existing);
+                          }}
+                        >
+                          Existing
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.AdminManagement);
                             setSubsection(UserPageSubsection.New);
                           }}
                         >

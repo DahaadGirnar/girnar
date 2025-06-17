@@ -15,6 +15,8 @@ import GuestRoomBookingReview from "./widgets/guest-room-booking-review";
 import GuestRoomBookingExisting from "./widgets/guest-room-booking-existing";
 import UserManagementExisting from "./widgets/user-management-existing";
 import UserManagementNew from "./widgets/user-management-new";
+import AdminManagementExisting from "./widgets/admin-management-existing";
+import AdminManagementNew from "./widgets/admin-management-new";
 
 export default function UserWidgetManager() {
   const { section, subsection } = useUserPage();
@@ -47,6 +49,12 @@ export default function UserWidgetManager() {
         <>
           {(subsection === UserPageSubsection.New) && <UserManagementNew />}
           {(subsection === UserPageSubsection.Existing) && <UserManagementExisting />}
+        </>
+      )}
+      {(section === UserPageSection.AdminManagement) && (
+        <>
+          {(subsection === UserPageSubsection.New) && <AdminManagementNew />}
+          {(subsection === UserPageSubsection.Existing) && <AdminManagementExisting />}
         </>
       )}
     </>

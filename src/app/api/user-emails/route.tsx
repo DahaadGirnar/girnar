@@ -7,7 +7,7 @@ export async function GET() {
   if (res.status === 403) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  
+
   const adminClient = createAdminClient();
   const { data: userList, error: usersListError } = await adminClient.auth.admin.listUsers({
     page: 1,
