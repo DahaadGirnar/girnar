@@ -1,3 +1,13 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
@@ -84,60 +94,65 @@ export default function UserManagementExisting() {
     <div>
       <h2 className="font-bold text-2xl mb-4">New Users</h2>
       {loading && (
-        <div className="mt-4 text-muted-foreground">Loading users...</div>
+        <div className="text-muted-foreground">Loading users...</div>
       )}
       {error && (
-        <div className="mt-4 text-red-600">{error}</div>
+        <div className="text-red-600">{error}</div>
       )}
       {!loading && !error && users.length === 0 && (
-        <div className="mt-4 text-muted-foreground">No users found.</div>
+        <div className="text-muted-foreground">No users found.</div>
       )}
       {!loading && !error && users.length > 0 && (
-        <div className="overflow-x-auto mt-4">
-          <table className="min-w-full border border-gray-300">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 border">Full Name</th>
-                <th className="px-4 py-2 border">Entry No</th>
-                <th className="px-4 py-2 border">Phone</th>
-                <th className="px-4 py-2 border">Email</th>
-                <th className="px-4 py-2 border">Room No</th>
-                <th className="px-4 py-2 border"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {(users ?? []).map((user) => (
-                <tr key={user.id}>
-                  <td className="px-4 py-2 border">{user.full_name}</td>
-                  <td className="px-4 py-2 border">{user.entry_no}</td>
-                  <td className="px-4 py-2 border">{user.phone}</td>
-                  <td className="px-4 py-2 border">{user.email}</td>
-                  <td className="px-4 py-2 border">{user.room_no}</td>
-                  <td className="px-4 py-2 border text-center">
-                    <button
-                      title="Approve user"
-                      className="text-green-600 hover:text-green-800"
-                      onClick={() => approveUser(user.id)}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="inline w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </button>
-                    <button
-                      title="Delete user"
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() => deleteUser(user.id)}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="inline w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Full Name</TableHead>
+              <TableHead>Entry No</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Room No</TableHead>
+              <TableHead className="text-center">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.full_name}</TableCell>
+                <TableCell>{user.entry_no}</TableCell>
+                <TableCell>{user.phone}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.room_no}</TableCell>
+                <TableCell className="text-center">
+                  <button
+                    title="Approve user"
+                    className="text-green-600 hover:text-green-800"
+                    onClick={() => approveUser(user.id)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="inline w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </button>
+                  <button
+                    title="Delete user"
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => deleteUser(user.id)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="inline w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={6}>
+                Showing {users.length} users
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
       )}
     </div>
   );
