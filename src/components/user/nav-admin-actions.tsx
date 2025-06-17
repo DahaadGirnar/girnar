@@ -4,7 +4,8 @@ import {
   Megaphone,
   AlertTriangle,
   BedDouble,
-  ChevronRight
+  ChevronRight,
+  User
 } from "lucide-react"
 
 import {
@@ -70,52 +71,6 @@ export function NavAdminActions() {
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton>
                     <BedDouble />
-                    <span>User Management</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <span
-                          className="select-none"
-                          onClick={() => {
-                            setSection(UserPageSection.UserManagement);
-                            setSubsection(UserPageSubsection.Existing);
-                          }}
-                        >
-                          Existing
-                        </span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <span
-                          className="select-none"
-                          onClick={() => {
-                            setSection(UserPageSection.GuestRoomBooking);
-                            setSubsection(UserPageSubsection.New);
-                          }}
-                        >
-                          New
-                        </span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
-
-            <Collapsible
-              asChild
-              className="group/collapsible"
-            >
-              <SidebarMenuItem>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton>
-                    <BedDouble />
                     <span>Guest Room Booking</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
@@ -146,6 +101,52 @@ export function NavAdminActions() {
                           }}
                         >
                           Review
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+
+            <Collapsible
+              asChild
+              className="group/collapsible"
+            >
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <User />
+                    <span>User Management</span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.UserManagement);
+                            setSubsection(UserPageSubsection.Existing);
+                          }}
+                        >
+                          Existing
+                        </span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton asChild>
+                        <span
+                          className="select-none"
+                          onClick={() => {
+                            setSection(UserPageSection.UserManagement);
+                            setSubsection(UserPageSubsection.New);
+                          }}
+                        >
+                          New
                         </span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
