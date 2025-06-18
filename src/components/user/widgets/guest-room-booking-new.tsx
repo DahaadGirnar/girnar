@@ -1,7 +1,6 @@
 'use client';
 
 import { createClient } from "@/utils/supabase/client";
-
 import { useState, useEffect } from "react";
 import { useUser } from "@/hooks/use-user";
 
@@ -34,32 +33,81 @@ export default function GuestRoomBookingNew() {
   const [error, setError] = useState<string | null>("");
 
   const [requestExists, setRequestExists] = useState(false);
+  const [bookings, setBookings] = useState<
+    { id: number; guest_name: string; from_date: string; to_date: string }[]
+  >([]);
 
+  // Load all bookings (not just for this user)
   useEffect(() => {
-    const checkExistingBooking = async () => {
+    const fetchAllBookings = async () => {
       const supabase = createClient();
-      const { data: bookings, error: bookingsError } = await supabase
+      const { data, error: bookingsError } = await supabase
         .from("bookings")
-        .select("id, guest_name, from_date, to_date")
-        .eq("user_id", user?.id)
-        .limit(1);
+        .select("id, user_id, guest_name, from_date, to_date");
 
-      if (!bookingsError && bookings && bookings.length > 0) {
-        setRequestExists(true);
-        setGuestName(bookings[0].guest_name);
-        setFromDate(new Date(bookings[0].from_date));
-        setToDate(new Date(bookings[0].to_date));
+      if (!bookingsError && data && data.length > 0) {
+        setBookings(data);
+        // Check if any booking for this user overlaps with today or is in the future
+        if (user?.id) {
+          const now = new Date();
+          const activeBooking = data.find(
+            (b) =>
+              b.user_id === user.id &&
+              now <= new Date(b.to_date)
+          );
+          if (activeBooking) {
+            setRequestExists(true);
+            setGuestName(activeBooking.guest_name);
+            setFromDate(new Date(activeBooking.from_date));
+            setToDate(new Date(activeBooking.to_date));
+          }
+        }
       }
     };
-    checkExistingBooking();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    fetchAllBookings();
+  }, [user?.id]);
+
+  // Helper to get all booked dates as Date[]
+  function getBookedDates() {
+    const dates: Date[] = [];
+    bookings.forEach((b) => {
+      const from = new Date(b.from_date);
+      const to = new Date(b.to_date);
+      for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
+        dates.push(new Date(d));
+      }
+    });
+    return dates;
+  }
+
+  // Helper to check if a date is booked
+  function isDateBooked(date: Date) {
+    return getBookedDates().some(
+      (d) =>
+        d.getFullYear() === date.getFullYear() &&
+        d.getMonth() === date.getMonth() &&
+        d.getDate() === date.getDate()
+    );
+  }
+
+  // Helper to check if selected range overlaps with any booking
+  function isRangeBooked(start: Date, end: Date) {
+    return bookings.some((b) => {
+      const bFrom = new Date(b.from_date);
+      const bTo = new Date(b.to_date);
+      return start <= bTo && end >= bFrom;
+    });
+  }
 
   const requestGuestRoom = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!fromDate || !toDate) {
       setError("Please select both From and To dates.");
+      return;
+    }
+    if (isRangeBooked(fromDate, toDate)) {
+      setError("Selected dates overlap with an existing booking.");
       return;
     }
     setIsLoading(true);
@@ -165,6 +213,7 @@ export default function GuestRoomBookingNew() {
                       setFromOpen(false);
                     }}
                     className="rounded-md border"
+                    disabled={(date) => date < new Date() || isDateBooked(date)}
                   />
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -190,6 +239,9 @@ export default function GuestRoomBookingNew() {
                       setToOpen(false);
                     }}
                     className="rounded-md border"
+                    disabled={(date) => 
+                      isDateBooked(date) || date < new Date() || (fromDate !== undefined && date < fromDate)
+                    }
                   />
                 </DropdownMenuContent>
               </DropdownMenu>
