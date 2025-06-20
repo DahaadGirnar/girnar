@@ -82,7 +82,7 @@ export function SignupForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="xx1250000@iitd.ac.in"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

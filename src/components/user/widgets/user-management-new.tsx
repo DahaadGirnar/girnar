@@ -28,6 +28,26 @@ export default function UserManagementExisting() {
 
     if (!updateError) {
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+
+      try {
+        // Send email notification
+        const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
+        await fetch(`${baseUrl}/api/mail`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: users.find(user => user.id === userId)?.email || "",
+            subject: "Your Girnar Website account has been approved",
+            text: "Congratulations! Your account has been approved. Now you can log in to the Girnar website and access all the features.",
+          }),
+        });
+      } catch (emailError) {
+        console.error("Failed to send approval email:", emailError);
+        setError(`Failed to send approval email: ${(emailError as Error).message}`);
+      }
+      
     } else {
       setError(`Failed to approve user: ${updateError.message}`);
     }
