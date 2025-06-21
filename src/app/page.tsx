@@ -22,34 +22,36 @@ export default function Home() {
     "/images/hero/4.jpg",
   ];
 
-  const items = [
+  const draggables = [
     {
-      id: 1,
       image: "/images/draggable/2.jpg",
       className: "absolute top-40 left-[25%] rotate-[-7deg]",
     },
     {
-      id: 2,
+      image: "/images/draggable/7.jpg",
+      className: "absolute top-20 left-[40%] rotate-[10deg]",
+    },
+    {
+      image: "/images/draggable/8.jpg",
+      className: "absolute top-30 left-[30%] rotate-[2deg]",
+    },
+    {
       image: "/images/draggable/6.jpg",
       className: "absolute top-32 left-[20%] rotate-[-8deg]",
     },
     {
-      id: 3,
       image: "/images/draggable/3.jpg",
       className: "absolute top-5 left-[40%] rotate-[8deg]",
     },
     {
-      id: 4,
       image: "/images/draggable/1.jpg",
       className: "absolute top-10 left-[20%] rotate-[-5deg]",
     },
     {
-      id: 5,
       image: "/images/draggable/4.jpg",
       className: "absolute top-32 left-[55%] rotate-[10deg]",
     },
     {
-      id: 6,
       image: "/images/draggable/5.jpg",
       className: "absolute top-20 right-[35%] rotate-[2deg]",
     }
@@ -63,6 +65,10 @@ export default function Home() {
     {
       title: "Winners of Photo Story",
       src: "/images/carousel/photostory_2024.jpg",
+    },
+    {
+      title: "Winners of CAIC GC 2024",
+      src: "/images/carousel/tech_gc_2024.jpg",
     },
     {
       title: "Winners of Wall Painting",
@@ -151,15 +157,20 @@ export default function Home() {
 
       <div ref={nextSectionRef} className="flex flex-col w-full min-h-screen h-screen snap-start">
         <h1
-          className="text-4xl font-bold my-8 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400"
+          className="text-4xl font-bold mt-8 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400"
         >
           Our Movements
         </h1>
-        <DraggableCardContainer className="relative flex w-full items-center justify-center overflow-x-clip">
-          {items.map((item) => (
-            <DraggableCardBody key={item.id} className={item.className}>
+
+        <p className="hidden md:block mt-2 text-center text-lg bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+          Drag to see magic unfold
+        </p>
+
+        <DraggableCardContainer className="relative mt-8 flex w-full items-center justify-center overflow-x-clip">
+          {draggables.map((item, index) => (
+            <DraggableCardBody key={item.image + index} className={item.className}>
               <Image
-                alt={`Draggable item ${item.id}`}
+                alt={`Draggable item ${index}`}
                 src={item.image}
                 width={500}
                 height={500}
