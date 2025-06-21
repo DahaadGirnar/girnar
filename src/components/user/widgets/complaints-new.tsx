@@ -25,7 +25,7 @@ export default function NewComplaintsWidget() {
   const CATEGORY_OPTIONS = [
     { value: "Maintenance", label: "Maintenance" },
     { value: "Mess", label: "Mess" },
-    { value: "SC/ST", label: "SC/ST" },
+    { value: "Other", label: "Other" },
   ];
 
   const [title, setTitle] = useState("");

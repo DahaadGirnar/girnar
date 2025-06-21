@@ -19,7 +19,7 @@ export default function ReviewComplaintsWidget() {
   const [selectedStatus, setSelectedStatus] = useState("Pending");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const statusOptions = ["All", "Pending", "In Progress", "Closed"];
-  const categoryOptions = ["All", "Maintenance", "Mess", "SC/ST"];
+  const categoryOptions = ["All", "Maintenance", "Mess", "Other"];
 
   useEffect(() => {
     const fetchData = async () => {
