@@ -54,35 +54,6 @@ export default function NewComplaintsWidget() {
         });
       if (insertError) throw insertError;
 
-      // Send email notification to admins
-      try {
-        const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-          ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-          : "http://localhost:3000";
-        
-        const mailResponse = await fetch(`${baseUrl}/api/user-emails?admin=true`);
-        if (!mailResponse.ok) {
-          throw new Error("Failed to fetch admin emails");
-        }
-        const { users } = await mailResponse.json();
-        const adminEmails = users.map((user: { email: string }) => user.email);
-
-        await fetch(`${baseUrl}/api/mail`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            to: adminEmails,
-            subject: "New Complaint Lodged",
-            text: `A new complaint has been lodged by ${user?.full_name} (${user?.entry_no}).\n\nTitle: ${title}\nCategory: ${category}\nDescription: ${description}\n\nPlease review it in the admin panel.`,
-          })
-        });
-
-      } catch (emailError) {
-        console.error("Failed to send complaint email:", emailError);
-      }
-
       setSection(UserPageSection.Complaints);
       setSubsection(UserPageSubsection.Existing);
     } catch (err) {
