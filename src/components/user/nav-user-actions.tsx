@@ -25,12 +25,14 @@ import {
 } from "@/components/ui/sidebar"
 
 import { useUser } from "@/hooks/use-user"
+import { useSidebar } from "@/components/ui/sidebar";
 import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections"
 import { useUserPage } from "@/hooks/use-user-page"
 
 export function NavUserActions() {
   const { setSection, setSubsection } = useUserPage();
   const { user } = useUser();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -44,6 +46,7 @@ export function NavUserActions() {
               <SidebarMenuButton asChild onClick={() => {
                 setSection(UserPageSection.Announcements);
                 setSubsection(UserPageSubsection.Existing);
+                setOpenMobile(false);
               }}>
                 <div className="flex items-center gap-2">
                   <Megaphone />
@@ -73,6 +76,7 @@ export function NavUserActions() {
                           onClick={() => {
                             setSection(UserPageSection.Complaints);
                             setSubsection(UserPageSubsection.Existing);
+                            setOpenMobile(false);
                           }}
                         >
                           Existing
@@ -87,6 +91,7 @@ export function NavUserActions() {
                           onClick={() => {
                             setSection(UserPageSection.Complaints);
                             setSubsection(UserPageSubsection.New);
+                            setOpenMobile(false);
                           }}
                         >
                           New
@@ -102,6 +107,7 @@ export function NavUserActions() {
                             onClick={() => {
                               setSection(UserPageSection.Complaints);
                               setSubsection(UserPageSubsection.Review);
+                              setOpenMobile(false);
                             }}
                           >
                             Review
@@ -118,6 +124,7 @@ export function NavUserActions() {
               <SidebarMenuButton asChild onClick={() => {
                 setSection(UserPageSection.GuestRoomBooking);
                 setSubsection(UserPageSubsection.New);
+                setOpenMobile(false);
               }}>
                 <div className="flex items-center gap-2">
                   <BedDouble />

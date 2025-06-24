@@ -27,12 +27,14 @@ import {
 } from "@/components/ui/sidebar"
 
 import { useUser } from "@/hooks/use-user"
+import { useSidebar } from "@/components/ui/sidebar";
 import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections"
 import { useUserPage } from "@/hooks/use-user-page"
 
 export function NavAdminActions() {
   const { setSection, setSubsection } = useUserPage();
   const { user } = useUser();
+  const { setOpenMobile } = useSidebar();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -44,6 +46,7 @@ export function NavAdminActions() {
               <SidebarMenuButton asChild onClick={() => {
                 setSection(UserPageSection.Announcements);
                 setSubsection(UserPageSubsection.New);
+                setOpenMobile(false);
               }}>
                 <div className="flex items-center gap-2">
                   <Megaphone />
@@ -56,6 +59,7 @@ export function NavAdminActions() {
               <SidebarMenuButton asChild onClick={() => {
                 setSection(UserPageSection.Complaints);
                 setSubsection(UserPageSubsection.Review);
+                setOpenMobile(false);
               }}>
                 <div className="flex items-center gap-2">
                   <AlertTriangle />
@@ -85,6 +89,7 @@ export function NavAdminActions() {
                           onClick={() => {
                             setSection(UserPageSection.GuestRoomBooking);
                             setSubsection(UserPageSubsection.Existing);
+                            setOpenMobile(false);
                           }}
                         >
                           Existing
@@ -99,6 +104,7 @@ export function NavAdminActions() {
                           onClick={() => {
                             setSection(UserPageSection.GuestRoomBooking);
                             setSubsection(UserPageSubsection.Review);
+                            setOpenMobile(false);
                           }}
                         >
                           Review
@@ -131,6 +137,7 @@ export function NavAdminActions() {
                           onClick={() => {
                             setSection(UserPageSection.UserManagement);
                             setSubsection(UserPageSubsection.Existing);
+                            setOpenMobile(false);
                           }}
                         >
                           Existing
@@ -145,6 +152,7 @@ export function NavAdminActions() {
                           onClick={() => {
                             setSection(UserPageSection.UserManagement);
                             setSubsection(UserPageSubsection.New);
+                            setOpenMobile(false);
                           }}
                         >
                           New
@@ -177,6 +185,7 @@ export function NavAdminActions() {
                           onClick={() => {
                             setSection(UserPageSection.AdminManagement);
                             setSubsection(UserPageSubsection.Existing);
+                            setOpenMobile(false);
                           }}
                         >
                           Existing
@@ -191,6 +200,7 @@ export function NavAdminActions() {
                           onClick={() => {
                             setSection(UserPageSection.AdminManagement);
                             setSubsection(UserPageSubsection.New);
+                            setOpenMobile(false);
                           }}
                         >
                           New
