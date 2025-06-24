@@ -31,7 +31,7 @@ export default function UserManagementExisting() {
 
       try {
         // Send email notification
-        const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
+        const baseUrl = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
         await fetch(`${baseUrl}/api/mail`, {
           method: "POST",
           headers: {
@@ -54,7 +54,7 @@ export default function UserManagementExisting() {
   }
 
   const deleteUser = async (userId: string) => {
-    const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000";
     const res = await fetch(`${baseUrl}/api/delete-user`, {
       method: "DELETE",
       headers: {

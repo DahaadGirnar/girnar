@@ -7,8 +7,8 @@ export async function GET(request: Request) {
 
   // If admin param is not provided, or is not "true", check for admin
   if (adminParam !== "true") {
-    const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    const baseUrl = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000";
     const res = await fetch(`${baseUrl}/api/is-admin`, { cache: "no-store" });
     if (res.status === 403) {
