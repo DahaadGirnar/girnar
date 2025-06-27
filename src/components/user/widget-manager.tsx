@@ -4,6 +4,7 @@ import { useUserPage } from "@/hooks/use-user-page";
 import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections";
 
 import GeneralWidget from "./widgets/general";
+import RepresentativesWidget from "./widgets/representatives";
 import ProfileWidget from "./widgets/profile";
 import ExistingAnnouncementsWidget from "./widgets/announcements-existing";
 import NewAnnouncementsWidget from "./widgets/announcements-new";
@@ -24,6 +25,7 @@ export default function UserWidgetManager() {
   return (
     <>
       {(section === UserPageSection.General) && <GeneralWidget />}
+      {(section === UserPageSection.Representatives) && <RepresentativesWidget />}
       {(section === UserPageSection.Profile) && <ProfileWidget />}
       {(section === UserPageSection.Announcements) && (
         <>

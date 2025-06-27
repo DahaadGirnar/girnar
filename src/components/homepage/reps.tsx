@@ -74,7 +74,7 @@ export default function Reps() {
     {
       title: "Mess Secretary",
       src: "/images/secy_reps/mess_2024.jpg",
-      content: <CardContent name={"Sujan"} number={"+91 82861 80930"} />,
+      content: <CardContent name={"Sujaan Satish Kaushik"} number={"+91 82861 80930"} />,
     },
     {
       title: "Tech Secretary",
@@ -100,6 +100,11 @@ export default function Reps() {
       title: "Literary Representative",
       src: "/images/secy_reps/lit_2024.jpg",
       content: <CardContent name={"Pragun"} number={"+91 82797 54052"} />,
+    },
+    {
+      title: "PFC Representative",
+      src: "/images/secy_reps/pfc_2024.jpg",
+      content: <CardContent name={"Shubh Patel"} number={"+91 87800 77144"} />,
     },
     {
       title: "Indoor Sports Representative",

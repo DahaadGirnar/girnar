@@ -7,7 +7,7 @@ export default function Winnings() {
       src: "/images/carousel/music_2024.jpg",
     },
     {
-      title: "Winners of Photo Story",
+      title: "Winners of PFC Trophy",
       src: "/images/carousel/photostory_2024.jpg",
     },
     {

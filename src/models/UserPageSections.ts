@@ -1,5 +1,6 @@
 export enum UserPageSection {
   General = "General",
+  Representatives = "Representatives",
   Profile = "Profile",
   Announcements = "Announcements",
   Complaints = "Complaints",
@@ -16,6 +17,7 @@ export enum UserPageSubsection {
 
 export const SectionSubsections: Record<UserPageSection, UserPageSubsection[]> = {
   [UserPageSection.General]: [],
+  [UserPageSection.Representatives]: [],
   [UserPageSection.Profile]: [],
   [UserPageSection.Announcements]: [
     UserPageSubsection.Existing,

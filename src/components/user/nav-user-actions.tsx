@@ -4,6 +4,7 @@ import {
   Megaphone,
   AlertTriangle,
   BedDouble,
+  UserCog,
   ChevronRight
 } from "lucide-react"
 
@@ -129,6 +130,18 @@ export function NavUserActions() {
                 <div className="flex items-center gap-2">
                   <BedDouble />
                   <span className="select-none">Guest Room Booking</span>
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild onClick={() => {
+                setSection(UserPageSection.Representatives);
+                setOpenMobile(false);
+              }}>
+                <div className="flex items-center gap-2">
+                  <UserCog />
+                  <span className="select-none">Representatives</span>
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
