@@ -113,7 +113,7 @@ export default function UserManagementExisting() {
       return false;
     }
 
-    // Entry no filter by branch (e.g. CSB)
+    // Entry no filter by branch (e.g. CS1)
     if (branchFilter && (!user.entry_no || !user.entry_no.substring(4, 8).toUpperCase().includes(branchFilter.toUpperCase()))) {
       return false;
     }
