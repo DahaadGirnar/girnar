@@ -15,11 +15,31 @@ import { Button } from "@/components/ui/button";
 import { UserModel } from "@/models/user";
 import { useUserPage } from "@/hooks/use-user-page";
 import { UserPageSection, UserPageSubsection } from "@/models/UserPageSections";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Filter } from "lucide-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function UserManagementExisting() {
   const [users, setUsers] = useState<UserModel[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [floorFilter, setFloorFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
+  const [branchFilter, setBranchFilter] = useState("");
 
   const { setSection, setSubsection } = useUserPage();
 
@@ -82,16 +102,92 @@ export default function UserManagementExisting() {
     fetchUsers();
   }, []);
 
+  const filteredUsers = users.filter(user => {
+    // Room no filter by floor (A-H)
+    if (floorFilter && (!user.room_no || user.room_no.charAt(1).toUpperCase() !== floorFilter)) {
+      return false;
+    }
+
+    // Entry no filter by year of entry (e.g. 2021)
+    if (yearFilter && (!user.entry_no || !user.entry_no.startsWith(yearFilter))) {
+      return false;
+    }
+
+    // Entry no filter by branch (e.g. CSB)
+    if (branchFilter && (!user.entry_no || !user.entry_no.substring(4, 8).toUpperCase().includes(branchFilter.toUpperCase()))) {
+      return false;
+    }
+
+    return true;
+  });
+
   return (
     <div>
       <div className="flex">
         <h2 className="font-bold text-2xl mb-4">Existing Users</h2>
-        <Button size="sm" className="ml-auto" onClick={() => {
-          setSection(UserPageSection.UserManagement);
-          setSubsection(UserPageSubsection.New);
-        }}>
-          Approve New Users
-        </Button>
+        <div className="ml-auto flex items-center gap-2">
+          <Button size="sm" onClick={() => {
+            setSection(UserPageSection.UserManagement);
+            setSubsection(UserPageSubsection.New);
+          }}>
+            Approve New Users
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[250px]">
+              <DropdownMenuLabel>Filter By</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="p-2 grid gap-3">
+                <div className="grid gap-1.5">
+                  <Label htmlFor="floor-filter">Floor</Label>
+                  <Select onValueChange={(value) => setFloorFilter(value === "all" ? "" : value)} value={floorFilter || "all"}>
+                    <SelectTrigger id="floor-filter">
+                      <SelectValue placeholder="Select a floor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Floors</SelectItem>
+                      <SelectItem value="A">Floor A</SelectItem>
+                      <SelectItem value="B">Floor B</SelectItem>
+                      <SelectItem value="C">Floor C</SelectItem>
+                      <SelectItem value="D">Floor D</SelectItem>
+                      <SelectItem value="E">Floor E</SelectItem>
+                      <SelectItem value="F">Floor F</SelectItem>
+                      <SelectItem value="G">Floor G</SelectItem>
+                      <SelectItem value="H">Floor H</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="year-filter">Year</Label>
+                  <Input
+                    id="year-filter"
+                    placeholder="e.g., 2021"
+                    value={yearFilter}
+                    onChange={(e) => setYearFilter(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="branch-filter">Branch</Label>
+                  <Input
+                    id="branch-filter"
+                    placeholder="e.g., CS1"
+                    value={branchFilter}
+                    onChange={(e) => setBranchFilter(e.target.value)}
+                  />
+                </div>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setFloorFilter("");
+                  setYearFilter("");
+                  setBranchFilter("");
+                }}>Clear Filters</Button>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       {loading && (
         <div className="text-muted-foreground">Loading users...</div>
@@ -99,10 +195,10 @@ export default function UserManagementExisting() {
       {error && (
         <div className="text-red-500">{error}</div>
       )}
-      {!loading && !error && users.length === 0 && (
+      {!loading && !error && filteredUsers.length === 0 && (
         <div className="text-muted-foreground">No users found.</div>
       )}
-      {!loading && !error && users.length > 0 && (
+      {!loading && !error && filteredUsers.length > 0 && (
         <Table>
           <TableHeader>
             <TableRow>
@@ -115,7 +211,7 @@ export default function UserManagementExisting() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.full_name}</TableCell>
                 <TableCell>{user.entry_no}</TableCell>
@@ -139,7 +235,7 @@ export default function UserManagementExisting() {
           <TableFooter>
             <TableRow>
               <TableCell colSpan={6}>
-                Showing {users.length} users
+                Showing {filteredUsers.length} users
               </TableCell>
             </TableRow>
           </TableFooter>
