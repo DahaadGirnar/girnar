@@ -51,8 +51,8 @@ export default function Credits() {
   };
 
   return (
-    <div className="snap-start">
-      <LampContainer className="flex flex-col items-center justify-center w-full h-screen">
+    <div className="flex h-screen w-full snap-start">
+      <LampContainer>
         <motion.h1
           initial={{ opacity: 0.5, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}

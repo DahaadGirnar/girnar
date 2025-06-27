@@ -5,10 +5,10 @@ import { useRef } from "react";
 import Hero from "@/components/homepage/hero";
 import DraggableImages from "@/components/homepage/draggable-images";
 import Winnings from "@/components/homepage/winnings";
+import Reps from "@/components/homepage/reps";
 import Credits from "@/components/homepage/credits";
 
-export default function Home() {
-
+export default function Home() { 
   const nextSectionRef = useRef<HTMLDivElement>(null);
 
   const handleNextPage = () => {
@@ -20,6 +20,7 @@ export default function Home() {
       <Hero handleNextPage={handleNextPage} />
       <DraggableImages nextSectionRef={nextSectionRef} />
       <Winnings />
+      <Reps />
       <Credits />
     </div>
   );

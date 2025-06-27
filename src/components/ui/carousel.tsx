@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
-import { useState, useRef, useId, useEffect } from "react";
+import { useState, useRef, useId, useEffect, useCallback } from "react";
 
 interface SlideData {
   title: string;
   src: string;
+  content?: React.ReactNode;
 }
 
 interface SlideProps {
@@ -117,6 +118,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold  relative">
             {title}
           </h2>
+          {slide.content}
         </article>
       </li>
     </div>
@@ -154,21 +156,24 @@ interface CarouselProps {
 export default function Carousel({ slides }: CarouselProps) {
   const [current, setCurrent] = useState(0);
 
-  const handlePreviousClick = () => {
+  const handlePreviousClick = useCallback(() => {
     const previous = current - 1;
     setCurrent(previous < 0 ? slides.length - 1 : previous);
-  };
+  }, [current, slides.length]);
 
-  const handleNextClick = () => {
+  const handleNextClick = useCallback(() => {
     const next = current + 1;
     setCurrent(next === slides.length ? 0 : next);
-  };
+  }, [current, slides.length]);
 
-  const handleSlideClick = (index: number) => {
-    if (current !== index) {
-      setCurrent(index);
-    }
-  };
+  const handleSlideClick = useCallback(
+    (index: number) => {
+      if (current !== index) {
+        setCurrent(index);
+      }
+    },
+    [current],
+  );
 
   const id = useId();
 
