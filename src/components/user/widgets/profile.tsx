@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { createClient } from "@/utils/supabase/client"
 import { useUser } from "@/hooks/use-user";
@@ -18,6 +18,11 @@ export default function ProfileWidget() {
   const [roomNumber, setRoomNumber] = useState(user?.room_no || "");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const ParseEntryNo = (email: string) => {
+    const emailRoot = email.split('@')[0].toUpperCase();
+    return "20" + emailRoot.slice(3, 5) + emailRoot.slice(0, 3) + emailRoot.slice(5, 9);
+  }
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +81,10 @@ export default function ProfileWidget() {
     updateUser(); // Refresh user data
   }
 
+  useEffect(() => {
+    setEntryNumber(ParseEntryNo(user?.email || ""));
+  }, [user?.email]);
+
   return (
     <div className="flex flex-col gap-2">
       <h2 className="text-2xl font-semibold">Your Profile:</h2>
@@ -107,9 +116,7 @@ export default function ProfileWidget() {
             <Input
               id="entry-number"
               type="text"
-              placeholder="2024CS10000"
-              minLength={11}
-              maxLength={11}
+              disabled
               value={entryNumber}
               onChange={(e) => setEntryNumber(e.target.value)}
               required

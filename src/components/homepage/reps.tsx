@@ -72,6 +72,11 @@ export default function Reps() {
       content: <CardContent name={"Aryan Tandon"} number={"+91 79754 92197"} />,
     },
     {
+      title: "Cultural Secretary",
+      src: "/images/secy_reps/cult_2024.jpg",
+      content: <CardContent name={"Utsab Das"} number={"+91 60098 92593"} />,
+    },
+    {
       title: "Representative to BSW",
       src: "/images/secy_reps/bsw1_2024.jpg",
       content: <CardContent name={"Aditya Pandey"} number={"+91 98936 32386"} />,
@@ -85,6 +90,11 @@ export default function Reps() {
       title: "Literary Representative",
       src: "/images/secy_reps/lit_2024.jpg",
       content: <CardContent name={"Pragun"} number={"+91 82797 54052"} />,
+    },
+    {
+      title: "Indoor Sports Representative",
+      src: "/images/secy_reps/isr_2024.jpg",
+      content: <CardContent name={"Chitresh Bhati"} number={"+91 89549 10484"} />,
     },
     {
       title: "Drama Representative",
