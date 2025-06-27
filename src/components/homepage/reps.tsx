@@ -62,9 +62,19 @@ const CardContent = (
 export default function Reps() {
   const slideData = [
     {
+      title: "House Secretary",
+      src: "/images/secy_reps/house_2024.jpg",
+      content: <CardContent name={"Ankit Sarma"} number={"+91 70000 13131"} />,
+    },
+    {
       title: "Secretary to SAC",
       src: "/images/secy_reps/sac_2024.jpg",
       content: <CardContent name={"Arnav Wadwa"} number={"+91 85477 29179"} />,
+    },
+    {
+      title: "Mess Secretary",
+      src: "/images/secy_reps/mess_2024.jpg",
+      content: <CardContent name={"Sujan"} number={"+91 82861 80930"} />,
     },
     {
       title: "Tech Secretary",
