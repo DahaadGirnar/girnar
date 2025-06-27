@@ -36,6 +36,20 @@ export default function ProfileWidget() {
       return;
     }
 
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      setError("Invalid phone number.");
+      setIsLoading(false);
+      return;
+    }
+
+    const roomNumberRegex = /^[NSEW][A-H]\d{2}$/;
+    if (!roomNumberRegex.test(roomNumber)) {
+      setError("Invalid room number. Format: Wing(N,S,E,W) + Floor(A-H) + Room No. e.g., NA01");
+      setIsLoading(false);
+      return;
+    }
+
     const profileData = {
       id: user.id,
       full_name: fullName,
@@ -105,7 +119,6 @@ export default function ProfileWidget() {
             <Input
               id="full-name"
               type="text"
-              placeholder="John Doe"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
@@ -139,8 +152,11 @@ export default function ProfileWidget() {
             <Input
               id="room-number"
               type="text"
+              placeholder="SB18"
+              minLength={4}
+              maxLength={4}
               value={roomNumber}
-              onChange={(e) => setRoomNumber(e.target.value)}
+              onChange={(e) => setRoomNumber(e.target.value.toUpperCase())}
               required
             />
           </div>

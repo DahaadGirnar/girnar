@@ -37,7 +37,7 @@ export function NavUser({
     avatar: string
   }
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile, setOpenMobile } = useSidebar()
   const { setSection } = useUserPage()
 
   const logout = async () => {
@@ -90,11 +90,12 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <SidebarMenuButton onClick={() => setSection(UserPageSection.Profile)}>
-                <User2 />
-                Profile
-              </SidebarMenuButton>
+            <DropdownMenuItem onClick={() => {
+              setSection(UserPageSection.Profile);
+              setOpenMobile(false);
+            }}>
+              <User2 />
+              Profile
             </DropdownMenuItem>
             <DropdownMenuItem onClick={logout}>
               <LogOut />
