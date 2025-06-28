@@ -62,8 +62,8 @@ export default function ReviewComplaintsWidget() {
       .eq("id", complaintToClose.id);
 
     if (!error) {
-      const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      const baseUrl = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
         : "http://localhost:3000";
       const res = await fetch(`${baseUrl}/api/user-emails?id=${complaintToClose.user_id}`);
       if (res.ok) {
