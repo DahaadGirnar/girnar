@@ -80,7 +80,7 @@ export default function ReviewComplaintsWidget() {
             body: JSON.stringify({
               to: userEmail,
               subject: "Your complaint has been closed",
-              text: `Your complaint titled "${complaintToClose.title || "No title"}" has been closed. Remarks: ${closingMessage || "No remarks provided."}`,
+              message: `Your complaint titled "${complaintToClose.title || "No title"}" has been closed. Remarks: ${closingMessage || "No remarks provided."}`,
             }),
           });
         }

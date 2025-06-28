@@ -3,8 +3,8 @@ import nodemailer from 'nodemailer';
 
 export async function POST(request: NextRequest) {
   try {
-    const { to, subject, text } = await request.json();
-    if (!to || !subject || !text) {
+    const { to, subject, message } = await request.json();
+    if (!to || !subject || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       from: process.env.EMAIL_USER,
       to,
       subject,
-      text,
+      text: message,
     });
 
 

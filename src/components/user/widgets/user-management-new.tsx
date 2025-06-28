@@ -40,7 +40,7 @@ export default function UserManagementExisting() {
           body: JSON.stringify({
             to: users.find(user => user.id === userId)?.email || "",
             subject: "Your Girnar Website account has been approved",
-            text: "Congratulations! Your account has been approved. Now you can log in to the Girnar website and access all the features.",
+            message: "Congratulations! Your account has been approved. Now you can log in to the Girnar website and access all the features.",
           }),
         });
       } catch (emailError) {
