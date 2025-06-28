@@ -4,11 +4,12 @@ import { createAdminClient } from "@/utils/supabase/admin";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const adminParam = url.searchParams.get("admin");
+  const id = url.searchParams.get("id");
 
   // If admin param is not provided, or is not "true", check for admin
   if (adminParam !== "true") {
-    const baseUrl = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+    const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000";
     const res = await fetch(`${baseUrl}/api/is-admin`, { cache: "no-store" });
     if (res.status === 403) {
@@ -17,6 +18,18 @@ export async function GET(request: Request) {
   }
 
   const adminClient = createAdminClient();
+
+  if (id) {
+    const {
+      data: { user },
+      error,
+    } = await adminClient.auth.admin.getUserById(id);
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ users: [{ id: user?.id, email: user?.email }] });
+  }
+
   const { data: userList, error: usersListError } = await adminClient.auth.admin.listUsers({
     page: 1,
     perPage: 1000,

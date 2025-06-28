@@ -38,7 +38,7 @@ export function NavUser({
   }
 }) {
   const { isMobile, setOpenMobile } = useSidebar()
-  const { setSection } = useUserPage()
+  const { setSection, setSubsection } = useUserPage()
 
   const logout = async () => {
     const supabase = createClient()
@@ -92,6 +92,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => {
               setSection(UserPageSection.Profile);
+              setSubsection(null);
               setOpenMobile(false);
             }}>
               <User2 />

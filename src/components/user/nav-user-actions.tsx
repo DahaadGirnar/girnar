@@ -137,6 +137,7 @@ export function NavUserActions() {
             <SidebarMenuItem>
               <SidebarMenuButton asChild onClick={() => {
                 setSection(UserPageSection.Representatives);
+                setSubsection(null)
                 setOpenMobile(false);
               }}>
                 <div className="flex items-center gap-2">

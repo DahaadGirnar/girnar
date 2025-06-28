@@ -10,6 +10,17 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 import { Complaint } from "@/models/Complaint";
 
@@ -18,7 +29,9 @@ export default function ReviewComplaintsWidget() {
   const [complaintsError, setComplaintsError] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState("Pending");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const statusOptions = ["All", "Pending", "In Progress", "Closed"];
+  const [closingMessage, setClosingMessage] = useState("");
+  const [isClosing, setIsClosing] = useState(false);
+  const statusOptions = ["All", "Pending", "Closed"];
   const categoryOptions = ["All", "Maintenance", "Mess", "Other"];
 
   useEffect(() => {
@@ -37,6 +50,56 @@ export default function ReviewComplaintsWidget() {
     };
     fetchData();
   }, []);
+
+  const handleCloseComplaint = async (complaintToClose: Complaint) => {
+    if (!complaintToClose) return;
+
+    setIsClosing(true);
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("complaints")
+      .update({ status: "Closed" })
+      .eq("id", complaintToClose.id);
+
+    if (!error) {
+      const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000";
+      const res = await fetch(`${baseUrl}/api/user-emails?id=${complaintToClose.user_id}`);
+      if (res.ok) {
+        const { users } = await res.json();
+        const userEmail = users[0]?.email;
+
+        if (userEmail) {
+          // Send email notification to user
+          await fetch(`${baseUrl}/api/mail`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              to: userEmail,
+              subject: "Your complaint has been closed",
+              text: `Your complaint titled "${complaintToClose.title || "No title"}" has been closed. Remarks: ${closingMessage || "No remarks provided."}`,
+            }),
+          });
+        }
+      }
+
+        setComplaints((prev) =>
+          prev.map((comp) =>
+            comp.id === complaintToClose.id
+              ? { ...comp, status: "Closed", closing_message: closingMessage }
+              : comp
+          )
+        );
+      setClosingMessage("");
+    } else {
+      // Optionally handle the error, e.g., show a toast notification
+      console.error("Failed to close complaint:", error.message);
+    }
+    setIsClosing(false);
+  };
 
   function filterComplaints(list: Complaint[], status: string, category: string) {
     return list.filter((c) => {
@@ -102,8 +165,8 @@ export default function ReviewComplaintsWidget() {
           {filterComplaints(
             complaints
               .slice()
-              .sort((a: { status: "Pending" | "In Progress" | "Closed" }, b: { status: "Pending" | "In Progress" | "Closed" }) => {
-                const statusOrder: { [key in "Pending" | "In Progress" | "Closed"]: number } = { Pending: 0, "In Progress": 1, Closed: 2 };
+              .sort((a: { status: "Pending" | "Closed" }, b: { status: "Pending" | "Closed" }) => {
+                const statusOrder: { [key in "Pending" | "Closed"]: number } = { Pending: 0, Closed: 1 };
                 return statusOrder[a.status] - statusOrder[b.status];
               }),
             selectedStatus,
@@ -137,76 +200,41 @@ export default function ReviewComplaintsWidget() {
               {/* Action buttons */}
               <div className="flex gap-2 mt-2">
                 {c.status === "Pending" && (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={async () => {
-                        const supabase = createClient();
-                        const { error } = await supabase
-                          .from("complaints")
-                          .update({ status: "In Progress" })
-                          .eq("id", c.id);
-                        if (!error) {
-                          setComplaints((prev) =>
-                            prev.map((comp) =>
-                              comp.id === c.id
-                                ? { ...comp, status: "In Progress" }
-                                : comp
-                            )
-                          );
-                        }
-                      }}
-                    >
-                      Move to In Progress
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={async () => {
-                        const supabase = createClient();
-                        const { error } = await supabase
-                          .from("complaints")
-                          .update({ status: "Closed" })
-                          .eq("id", c.id);
-                        if (!error) {
-                          setComplaints((prev) =>
-                            prev.map((comp) =>
-                              comp.id === c.id
-                                ? { ...comp, status: "Closed" }
-                                : comp
-                            )
-                          );
-                        }
-                      }}
-                    >
-                      Close
-                    </Button>
-                  </>
-                )}
-                {c.status === "In Progress" && (
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={async () => {
-                      const supabase = createClient();
-                      const { error } = await supabase
-                        .from("complaints")
-                        .update({ status: "Closed" })
-                        .eq("id", c.id);
-                      if (!error) {
-                        setComplaints((prev) =>
-                          prev.map((comp) =>
-                            comp.id === c.id
-                              ? { ...comp, status: "Closed" }
-                              : comp
-                          )
-                        );
-                      }
-                    }}
-                  >
-                    Close
-                  </Button>
+                  <Dialog onOpenChange={(open) => !open && setClosingMessage("")}>
+                    <DialogTrigger asChild>
+                      <Button size="sm" variant="destructive">
+                        Close
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Close Complaint</DialogTitle>
+                        <DialogDescription>
+                          Please provide a closing message for this complaint. This will be send to the user.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4">
+                        <div className="grid w-full gap-2">
+                          <Label htmlFor={`message-${c.id}`}>Remarks</Label>
+                          <Textarea
+                            placeholder="Type your message here."
+                            id={`message-${c.id}`}
+                            rows={4}
+                            value={closingMessage}
+                            onChange={(e) => setClosingMessage(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          onClick={() => handleCloseComplaint(c)}
+                          disabled={isClosing}
+                        >
+                          {isClosing ? "Closing..." : "Confirm"}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 )}
                 {c.status === "Closed" && (
                   <Button
