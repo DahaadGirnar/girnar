@@ -64,12 +64,12 @@ export default function Reps() {
     {
       title: "House Secretary",
       src: "/images/secy_reps/house_2024.jpg",
-      content: <CardContent name={"Ankit Sarma"} number={"+91 70000 13131"} />,
+      content: <CardContent name={"Ankit Sharma"} number={"+91 70000 13131"} />,
     },
     {
       title: "Secretary to SAC",
       src: "/images/secy_reps/sac_2024.jpg",
-      content: <CardContent name={"Arnav Wadwa"} number={"+91 85477 29179"} />,
+      content: <CardContent name={"Arnav Wadhwa"} number={"+91 85477 29179"} />,
     },
     {
       title: "Mess Secretary",
